@@ -1,0 +1,73 @@
+.welcome-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+    background-color: var(--color-lighter-gray);
+}
+
+.welcome-page h1 {
+    font-size: 3rem;
+    color: var(--color-reddish-orange);
+    margin-bottom: 1.5rem;
+}
+
+.login-area {
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-light-gray);
+}
+
+.login-area h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-reddish-orange);
+}
+
+.input-group label {
+    font-weight: bold;
+    color: var(--color-black);
+}
+
+.input-group input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-light-gray);
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.input-group input:focus {
+    border-color: var(--color-reddish-orange);
+    outline: none;
+}
+
+.input-group .error-message {
+    color: var(--color-reddish-orange);
+    font-size: 0.875rem;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.actions p {
+    font-size: 1rem;
+    color: var(--color-gray);
+}

@@ -7,6 +7,8 @@ import MainContent from './components/layout/MainContent';
 import { useEffect, useState } from 'react';
 import { sortNewest } from './components/utils/SortingUtil';
 import axios from 'axios';
+import Login from './components/input/Login'
+import Button from './components/general/Button';
 
 function App() {
   const [currentView, setView] = useState({ type: 'home', id: null });
@@ -58,7 +60,7 @@ function App() {
   };
   useEffect(() => {
     console.log('Updated currentView:', currentView); // Debug
-}, [currentView]);
+  }, [currentView]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,15 +72,15 @@ function App() {
         //   console.log(`Fetching post with ID: ${currentView.id}`);
         //   await fetchPostById(currentView.id);
         // } else if (currentView.type === 'home') {
-          console.log('Fetching home data...');
-          await fetchCommunities();
-          console.log('Fetching communities...');
-          await fetchPosts();
-          console.log('Fetching posts...');
-          await fetchComments();
-          console.log('Fetching comments...');
-          await fetchLinkFlairs();
-          console.log('Fetching link flairs...');
+        console.log('Fetching home data...');
+        await fetchCommunities();
+        console.log('Fetching communities...');
+        await fetchPosts();
+        console.log('Fetching posts...');
+        await fetchComments();
+        console.log('Fetching comments...');
+        await fetchLinkFlairs();
+        console.log('Fetching link flairs...');
         // } else {
         //   console.error('Unknown view type:', currentView.type);
         // }
@@ -130,6 +132,7 @@ function App() {
         commentID={commentID}
         setCommentID={setCommentID}
       />
+      {/* <Login /> */}
     </div>
   );
 }
