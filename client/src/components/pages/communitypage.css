@@ -1,0 +1,9 @@
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.community-desc {
+    word-break: break-word;
+}

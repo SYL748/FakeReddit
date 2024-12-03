@@ -1,0 +1,15 @@
+.search-box-container {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    position: relative;
+    left: auto;
+}
+
+#search-box {
+    width: 38rem;
+    padding: 0.625rem;
+    border-radius: 1.25rem;
+    border: 0.0625rem solid var(--color-light-gray);
+    font-size: 1rem;
+}

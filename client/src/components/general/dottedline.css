@@ -1,0 +1,4 @@
+.dotted-line {
+    border-bottom: 1.5px dotted black;
+    margin: 1rem 0; /* Adjust margin as per your layout */
+}

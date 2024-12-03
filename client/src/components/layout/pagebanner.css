@@ -1,0 +1,12 @@
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    height: 3.5rem;
+    width: 100%;
+    padding: 0 1rem;
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-black);
+    z-index: 1000; /*fixes content from going under the bar*/
+}

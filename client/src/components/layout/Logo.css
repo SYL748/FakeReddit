@@ -1,0 +1,17 @@
+.logo-container {
+    display: flex;              /* Enable Flexbox */
+    align-items: center;         /* Vertically center the items */
+    cursor: pointer;             /* Make entire logo clickable */
+}
+
+#reddit-icon {
+    width: 2.2rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+#app-name a {
+    text-decoration: none;
+    color: var(--color-reddish-orange);
+    font-size: 2rem;
+}

@@ -1,0 +1,13 @@
+.bold {
+    font-weight: 700;
+}
+
+.views-comments {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.post-card-heading {
+    display: flex;
+    justify-content: space-between;
+}
