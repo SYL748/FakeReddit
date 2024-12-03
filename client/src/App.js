@@ -9,6 +9,7 @@ import { sortNewest } from './components/utils/SortingUtil';
 import axios from 'axios';
 import Login from './components/input/Login'
 import Button from './components/general/Button';
+import SignupPage from './components/input/SignUp';
 
 function App() {
   const [currentView, setView] = useState({ type: 'home', id: null });
@@ -94,7 +95,7 @@ function App() {
 
   return (
     <div className="top">
-      <PageBanner
+      {/* <PageBanner
         setView={setView}
         posts={posts}
         setPosts={setPosts}
@@ -131,8 +132,10 @@ function App() {
         setIsReply={setIsReply}
         commentID={commentID}
         setCommentID={setCommentID}
-      />
+      /> */}
       {/* <Login /> */}
+      <SignupPage />
+
     </div>
   );
 }

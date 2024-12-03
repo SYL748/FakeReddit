@@ -3,7 +3,7 @@ import TextInput from "./TextInput";
 import Button from "../general/Button";
 import './WelcomePage.css';
 
-export default function WelcomePage({ onLogin, onSignup, onGuest }) {
+export default function WelcomePage() {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({ email: "", password: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +29,6 @@ export default function WelcomePage({ onLogin, onSignup, onGuest }) {
             setErrors(newErrors);
         } else {
             setIsSubmitting(true);
-            onLogin(formData.email, formData.password);
         }
     };
 
