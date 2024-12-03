@@ -12,7 +12,8 @@ import Button from './components/general/Button';
 import SignupPage from './components/input/SignUp';
 
 function App() {
-  const [currentView, setView] = useState({ type: 'home', id: null });
+  const [currentView, setView] = useState({ type: "login", id: null });
+  const [loggedIn, setLoggedIn] = useState(false);
   const [communities, setCommunities] = useState([]);
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
@@ -63,81 +64,170 @@ function App() {
     console.log('Updated currentView:', currentView); // Debug
   }, [currentView]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // if (currentView.type === 'community' && currentView.id) {
+  //       //   console.log(`Fetching community with ID: ${currentView.id}`);
+  //       //   await fetchCommunityById(currentView.id);
+  //       // } else if (currentView.type === 'post' && currentView.id) {
+  //       //   console.log(`Fetching post with ID: ${currentView.id}`);
+  //       //   await fetchPostById(currentView.id);
+  //       // } else if (currentView.type === 'home') {
+  //       console.log('Fetching home data...');
+  //       await fetchCommunities();
+  //       console.log('Fetching communities...');
+  //       await fetchPosts();
+  //       console.log('Fetching posts...');
+  //       await fetchComments();
+  //       console.log('Fetching comments...');
+  //       await fetchLinkFlairs();
+  //       console.log('Fetching link flairs...');
+  //       // } else {
+  //       //   console.error('Unknown view type:', currentView.type);
+  //       // }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error.message);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [currentView]);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // if (currentView.type === 'community' && currentView.id) {
-        //   console.log(`Fetching community with ID: ${currentView.id}`);
-        //   await fetchCommunityById(currentView.id);
-        // } else if (currentView.type === 'post' && currentView.id) {
-        //   console.log(`Fetching post with ID: ${currentView.id}`);
-        //   await fetchPostById(currentView.id);
-        // } else if (currentView.type === 'home') {
-        console.log('Fetching home data...');
-        await fetchCommunities();
-        console.log('Fetching communities...');
-        await fetchPosts();
-        console.log('Fetching posts...');
-        await fetchComments();
-        console.log('Fetching comments...');
-        await fetchLinkFlairs();
-        console.log('Fetching link flairs...');
-        // } else {
-        //   console.error('Unknown view type:', currentView.type);
-        // }
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-      }
-    };
+    if (loggedIn && currentView === "main") {
+        const fetchData = async () => {
+            try {
+                await fetchCommunities();
+                await fetchPosts();
+                await fetchComments();
+                await fetchLinkFlairs();
+            } catch (error) {
+                console.error("Error fetching data:", error.message);
+            }
+        };
 
-    fetchData();
-  }, [currentView]);
+        fetchData();
+    }
+}, [loggedIn, currentView]);
 
+
+const handleLogin = () => {
+  setLoggedIn(true);
+  setView({type: 'main', id: null});
+};
+
+const handleGuestMode = () => {
+  setLoggedIn(true);
+  setView({type: 'main', id: null});
+};
+
+const handleSignup = () => {
+  setView({type: 'signup', id: null});
+};
+
+const handleSignupComplete = () => {
+  setView({type: 'login', id: null});
+};
+  // return (
+  //   <div className="top">
+  //     <PageBanner
+  //       setView={setView}
+  //       posts={posts}
+  //       setPosts={setPosts}
+  //       currentView={currentView}
+  //       comments={comments}
+  //       setSearchResults={setSearchResults}
+  //       setQuery={setQuery}
+  //       query={query}
+  //     />
+  //     <NavBar
+  //       setView={setView}
+  //       communities={communities}
+  //       currentView={currentView}
+  //       setPosts={setPosts}
+  //       posts={posts}
+  //     />
+  //     <MainContent
+  //       currentView={currentView}
+  //       setView={setView}
+  //       communities={communities}
+  //       setCommunities={setCommunities}
+  //       posts={posts}
+  //       setPosts={setPosts}
+  //       comments={comments}
+  //       setComments={setComments}
+  //       searchResults={searchResults}
+  //       setSearchResults={setSearchResults}
+  //       currPostCount={currPostCount}
+  //       setCount={setCount}
+  //       linkFlair={linkFlair}
+  //       setLinkFlair={setLinkFlair}
+  //       query={query}
+  //       isReply={isReply}
+  //       setIsReply={setIsReply}
+  //       commentID={commentID}
+  //       setCommentID={setCommentID}
+  //     />
+  //     <Login />
+  //     <SignupPage />
+
+  //   </div>
+  // );
   return (
     <div className="top">
-      {/* <PageBanner
-        setView={setView}
-        posts={posts}
-        setPosts={setPosts}
-        currentView={currentView}
-        comments={comments}
-        setSearchResults={setSearchResults}
-        setQuery={setQuery}
-        query={query}
-      />
-      <NavBar
-        setView={setView}
-        communities={communities}
-        currentView={currentView}
-        setPosts={setPosts}
-        posts={posts}
-      />
-      <MainContent
-        currentView={currentView}
-        setView={setView}
-        communities={communities}
-        setCommunities={setCommunities}
-        posts={posts}
-        setPosts={setPosts}
-        comments={comments}
-        setComments={setComments}
-        searchResults={searchResults}
-        setSearchResults={setSearchResults}
-        currPostCount={currPostCount}
-        setCount={setCount}
-        linkFlair={linkFlair}
-        setLinkFlair={setLinkFlair}
-        query={query}
-        isReply={isReply}
-        setIsReply={setIsReply}
-        commentID={commentID}
-        setCommentID={setCommentID}
-      /> */}
-      {/* <Login /> */}
-      <SignupPage />
-
+        {currentView.type === "login" && (
+            <Login
+                onLogin={handleLogin}
+                onSignup={handleSignup}
+                onGuest={handleGuestMode}
+            />
+        )}
+        {currentView.type === "signup" && (
+            <SignupPage onSignupComplete={handleSignupComplete} />
+        )}
+        {currentView.type === "main" && loggedIn && (
+            <>
+                <PageBanner
+                    setView={setView}
+                    posts={posts}
+                    setPosts={setPosts}
+                    currentView={currentView}
+                    comments={comments}
+                    setSearchResults={setSearchResults}
+                    setQuery={setQuery}
+                    query={query}
+                />
+                <NavBar
+                    setView={setView}
+                    communities={communities}
+                    currentView={currentView}
+                    setPosts={setPosts}
+                    posts={posts}
+                />
+                <MainContent
+                    currentView={currentView}
+                    setView={setView}
+                    communities={communities}
+                    setCommunities={setCommunities}
+                    posts={posts}
+                    setPosts={setPosts}
+                    comments={comments}
+                    setComments={setComments}
+                    searchResults={searchResults}
+                    setSearchResults={setSearchResults}
+                    currPostCount={currPostCount}
+                    setCount={setCount}
+                    linkFlair={linkFlair}
+                    setLinkFlair={setLinkFlair}
+                    query={query}
+                    isReply={isReply}
+                    setIsReply={setIsReply}
+                    commentID={commentID}
+                    setCommentID={setCommentID}
+                />
+            </>
+        )}
     </div>
-  );
+);
 }
 
 export default App;

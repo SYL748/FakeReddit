@@ -3,7 +3,7 @@ import TextInput from "./TextInput";
 import Button from "../general/Button";
 import './SignupPage.css';
 
-export default function SignupPage() {
+export default function SignupPage( {onSignupComplete} ) {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -49,6 +49,7 @@ export default function SignupPage() {
             setErrors(newErrors);
         } else {
             setIsSubmitting(true);
+            onSignupComplete();
         }
     };
 

@@ -3,7 +3,7 @@ import TextInput from "./TextInput";
 import Button from "../general/Button";
 import './WelcomePage.css';
 
-export default function WelcomePage() {
+export default function WelcomePage({ onLogin, onSignup, onGuest }) {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({ email: "", password: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,6 +30,14 @@ export default function WelcomePage() {
         } else {
             setIsSubmitting(true);
         }
+    };
+
+    const handleSignup = () => {
+        onSignup();
+    };
+
+    const handleGuest = () => {
+        onGuest();
     };
 
     return (
@@ -66,11 +74,13 @@ export default function WelcomePage() {
                 <Button
                     buttonName="Sign Up"
                     className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}
+                    onClick={handleSignup}
                 />
                 <p>Or</p>
                 <Button
                     buttonName="Continue as Guest"
                     className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}
+                    onClick={handleGuest}
                 />
             </div>
         </div>
