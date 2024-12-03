@@ -29,8 +29,15 @@ export default function WelcomePage({ onLogin, onSignup, onGuest }) {
             setErrors(newErrors);
         } else {
             setIsSubmitting(true);
-            onLogin(formData.email, formData.password);
         }
+    };
+
+    const handleSignup = () => {
+        onSignup();
+    };
+
+    const handleGuest = () => {
+        onGuest();
     };
 
     return (
@@ -67,11 +74,13 @@ export default function WelcomePage({ onLogin, onSignup, onGuest }) {
                 <Button
                     buttonName="Sign Up"
                     className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}
+                    onClick={handleSignup}
                 />
                 <p>Or</p>
                 <Button
                     buttonName="Continue as Guest"
                     className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}
+                    onClick={handleGuest}
                 />
             </div>
         </div>
