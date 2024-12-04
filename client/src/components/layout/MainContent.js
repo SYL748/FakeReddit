@@ -6,6 +6,7 @@ import CommunityPage from '../pages/CommunityPage';
 import PostDisplay from '../pages/PostDisplay';
 import SearchPage from '../pages/SearchPage';
 import CommentForm from '../input/CommentForm';
+import Profile from '../input/Profile';
 import { useState, useEffect } from 'react';
 
 function MainContent(props) {
@@ -113,6 +114,13 @@ function MainContent(props) {
         comments={props.comments}
         setIsReply={props.setIsReply}
         setCommentID={props.setCommentID}
+      />
+    );
+  }
+  else if(type === 'profile') { 
+    content = (
+      <Profile
+
       />
     );
   } else {

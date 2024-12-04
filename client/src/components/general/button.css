@@ -26,6 +26,10 @@
     background-color: var(--color-reddish-orange); /* Keeps the reddish-orange when selected */
     color: white;
 }
+.profile-active {
+    background-color: var(--color-reddish-orange); /* Keeps the reddish-orange when selected */
+    color: white;
+}
 .community-active {
     background-color: var(--color-gray);
     color: white;
