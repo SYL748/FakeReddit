@@ -5,6 +5,7 @@ import './homepage.css'
 import PostList from "../posts/PostList";
 
 function Homepage(props) {
+    console.log(props.posts);
     return (
         <div>
             <div className="home-heading">

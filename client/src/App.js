@@ -64,60 +64,43 @@ function App() {
     console.log('Updated currentView:', currentView); // Debug
   }, [currentView]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // if (currentView.type === 'community' && currentView.id) {
-  //       //   console.log(`Fetching community with ID: ${currentView.id}`);
-  //       //   await fetchCommunityById(currentView.id);
-  //       // } else if (currentView.type === 'post' && currentView.id) {
-  //       //   console.log(`Fetching post with ID: ${currentView.id}`);
-  //       //   await fetchPostById(currentView.id);
-  //       // } else if (currentView.type === 'home') {
-  //       console.log('Fetching home data...');
-  //       await fetchCommunities();
-  //       console.log('Fetching communities...');
-  //       await fetchPosts();
-  //       console.log('Fetching posts...');
-  //       await fetchComments();
-  //       console.log('Fetching comments...');
-  //       await fetchLinkFlairs();
-  //       console.log('Fetching link flairs...');
-  //       // } else {
-  //       //   console.error('Unknown view type:', currentView.type);
-  //       // }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error.message);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [currentView]);
   useEffect(() => {
-    if (loggedIn && currentView === "main") {
-        const fetchData = async () => {
-            try {
-                await fetchCommunities();
-                await fetchPosts();
-                await fetchComments();
-                await fetchLinkFlairs();
-            } catch (error) {
-                console.error("Error fetching data:", error.message);
-            }
-        };
-
-        fetchData();
-    }
-}, [loggedIn, currentView]);
-
+    const fetchData = async () => {
+      try {
+        // if (currentView.type === 'community' && currentView.id) {
+        //   console.log(`Fetching community with ID: ${currentView.id}`);
+        //   await fetchCommunityById(currentView.id);
+        // } else if (currentView.type === 'post' && currentView.id) {
+        //   console.log(`Fetching post with ID: ${currentView.id}`);
+        //   await fetchPostById(currentView.id);
+        // } else if (currentView.type === 'home') {
+        console.log('Fetching home data...');
+        await fetchCommunities();
+        console.log('Fetching communities...');
+        await fetchPosts();
+        console.log('Fetching posts...');
+        await fetchComments();
+        console.log('Fetching comments...');
+        await fetchLinkFlairs();
+        console.log('Fetching link flairs...');
+        // } else {
+        //   console.error('Unknown view type:', currentView.type);
+        // }
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
+    fetchData();
+  }, [currentView]);
 
 const handleLogin = () => {
   setLoggedIn(true);
-  setView({type: 'main', id: null});
+  setView({type: 'home', id: null});
 };
 
 const handleGuestMode = () => {
   setLoggedIn(true);
-  setView({type: 'main', id: null});
+  setView({type: 'home', id: null});
 };
 
 const handleSignup = () => {
@@ -184,7 +167,6 @@ const handleSignupComplete = () => {
         {currentView.type === "signup" && (
             <SignupPage onSignupComplete={handleSignupComplete} />
         )}
-        {currentView.type === "main" && loggedIn && (
             <>
                 <PageBanner
                     setView={setView}
@@ -225,7 +207,6 @@ const handleSignupComplete = () => {
                     setCommentID={setCommentID}
                 />
             </>
-        )}
     </div>
 );
 }
