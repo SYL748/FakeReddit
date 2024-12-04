@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const bcrypt = require('bcrypt');
 app.use(cors());
 app.use(express.json());
 
@@ -20,17 +21,37 @@ app.use(session({
     cookie: {httpOnly: true, sameSite: 'none', maxAge: 120302103, secure: false}, //temp age
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({mongoUrl: mongoDB})
+    store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1:27017/phreddit'}),
 }));
 
 const Community = require('./models/communities.js');
 const Comments = require('./models/comments.js');
 const LinkFlairs = require('./models/linkflairs.js');
 const Posts = require('./models/posts.js');
+const User = require('./models/users.js');
 
-app.get('/login', (req, res) => {
-    req.session.user = { id: 'user123', username: 'JohnDoe' };
-    res.send('test');
+app.post('/login', async (req, res) => {
+    try {
+        console.log(req.body);
+        const {email, password} = req.body;
+        const user = await User.findOne({email});
+    
+        if (!user) {
+            //ask about handling errors
+            console.log("user not found");
+            return res.send(false);
+        }
+    
+        const validPassword = await bcrypt.compare(password, user.password);
+    
+        req.session.userId = user._id;
+        console.log(req.session.id);
+        console.log(validPassword);
+
+        res.send(validPassword);
+    } catch (error) {
+        res.status(500).send("server error");
+    }
 });
 
 app.get('/communities', async (req, res) => {
