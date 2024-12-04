@@ -162,6 +162,8 @@ const handleSignupComplete = () => {
                 onLogin={handleLogin}
                 onSignup={handleSignup}
                 onGuest={handleGuestMode}
+                setView={setView}
+                setLoggedIn={setLoggedIn}
             />
         )}
         {currentView.type === "signup" && (
