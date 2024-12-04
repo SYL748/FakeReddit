@@ -30,6 +30,8 @@ export default function WelcomePage({ onLogin, onSignup, onGuest }) {
         } else {
             setIsSubmitting(true);
         }
+
+        
     };
 
     const handleSignup = () => {

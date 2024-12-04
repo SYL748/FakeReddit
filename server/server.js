@@ -4,18 +4,34 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 app.use(cors());
 app.use(express.json());
+
 const mongoose = require('mongoose');
 let mongoDB = "mongodb://127.0.0.1:27017/phreddit";
 mongoose.connect(mongoDB)
   .then(() => console.log('Connected to database'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+app.use(session({
+    secret: "temp",
+    cookie: {httpOnly: true, sameSite: 'none', maxAge: 120302103, secure: false}, //temp age
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({mongoUrl: mongoDB})
+}));
+
 const Community = require('./models/communities.js');
 const Comments = require('./models/comments.js');
 const LinkFlairs = require('./models/linkflairs.js');
 const Posts = require('./models/posts.js');
+
+app.get('/login', (req, res) => {
+    req.session.user = { id: 'user123', username: 'JohnDoe' };
+    res.send('test');
+});
 
 app.get('/communities', async (req, res) => {
   try {
