@@ -1,11 +1,7 @@
 /*
 TODO: 
-    No two users can create an account with the same email or display name.
-    The typed password should not contain their first or last name
-    Feedback must be presented to the user if the account could not be created
-        - Add an account created successfully.
-        - Add an email not found when logging in.
-        - Add error messages for the above errors.
+    - Add an account created successfully.
+    - Add an email not found when logging in.
 */
 
 
@@ -56,6 +52,18 @@ export default function SignupPage( {onSignupComplete} ) {
         if (formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match.";
         }
+        if (formData.password.includes(formData.firstName)) {
+            newErrors.password = "Password cannot contain your first name.";
+        }
+        if (formData.password.includes(formData.lastName)) {
+            newErrors.password = "Password cannot contain your last name.";
+        }
+        if (formData.password.includes(formData.displayName)) {
+            newErrors.password = "Password cannot contain your display name.";
+        }
+        if (formData.password.includes(formData.email)) {
+            newErrors.password = "Password cannot contain your email.";
+        }
     
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -74,11 +82,21 @@ export default function SignupPage( {onSignupComplete} ) {
                     }
                 );
 
+                onSignupComplete();
             } catch (error) {
-                console.log("error in signup client" + error);
-            }
+                //console.log(error);
+                const errors = error.response.data.errors;
 
-            onSignupComplete();
+                if (errors.displayName && errors.email) {
+                    setErrors({email: "Email already registered.", displayName: "Display name is already taken."});
+                } else if (errors.displayName) {
+                    setErrors({displayName: "Display name is already taken."});
+                } else if (errors.email) {
+                    setErrors({displayName: "Email already registered."});
+                } else {
+                    console.log("Error in sign up: " + error);
+                }
+            }
         }
     };
 
