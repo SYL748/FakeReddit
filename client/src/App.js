@@ -23,6 +23,8 @@ function App() {
   const [isReply, setIsReply] = useState(false);
   const [commentID, setCommentID] = useState('');
   const [user, setUser] = useState(null);
+  const [userCommunities, setUserCommunities] = useState([]);
+  const [otherCommunities, setOtherCommunities] = useState([]);
 
   const fetchCurrentUser = async () => {
     try {
@@ -36,11 +38,37 @@ function App() {
       handleSignupComplete();
     }
   };
+
+  // const fetchCommunities = async () => {
+  //   try {
+  //     axios.defaults.withCredentials = true;
+  //     const response = await axios.get('http://localhost:8000/communities');
+  //     setCommunities(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching communities:", error);
+  //   }
+  // };
+
   const fetchCommunities = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios.get('http://localhost:8000/communities');
-      setCommunities(response.data);
+      const response = await axios.get('http://localhost:8000/communities', {
+        withCredentials: true,
+      });
+      const allCommunities = response.data;
+      console.log(allCommunities);
+      console.log("FUCKKKKK      " + user.displayName);
+      console.log(user.communityIDs);
+      // Separate communities into "created by user" and "not created by user"
+      const userCreated = allCommunities.filter((community) =>
+        user.communityIDs.includes(community._id)
+      );
+      console.log("DSAFDSAFSADFAS:   " + userCreated);
+      userCreated.map(community => console.log(community.name));
+      const others = allCommunities.filter(
+        (community) => !user.communityIDs.includes(community._id)
+      );
+      setUserCommunities(userCreated);
+      setOtherCommunities(others);
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
@@ -87,18 +115,16 @@ function App() {
     };
     checkLoginStatus();
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await fetchCommunities();
-        // console.log('Fetching communities...');
-        await fetchPosts();
-        // console.log('Fetching posts...');
-        await fetchComments();
-        // console.log('Fetching comments...');
-        await fetchLinkFlairs();
-        // console.log('Fetching link flairs...');
+        if (user) {
+          await fetchCommunities();
+          await fetchPosts();
+          await fetchComments();
+          await fetchLinkFlairs();
+        }
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -106,90 +132,91 @@ function App() {
     fetchData();
   }, [currentView]);
 
-const handleLogin = () => {
-  setLoggedIn(true);
-  setView({type: 'home', id: null});
-};
+  const handleLogin = () => {
+    setLoggedIn(true);
+    setView({ type: 'home', id: null });
+  };
 
-const handleGuestMode = () => {
-  setLoggedIn(false);
-  setView({type: 'home', id: null});
-};
+  const handleGuestMode = () => {
+    setLoggedIn(false);
+    setView({ type: 'home', id: null });
+  };
 
-const handleSignup = () => {
-  setView({type: 'signup', id: null});
-};
+  const handleSignup = () => {
+    setView({ type: 'signup', id: null });
+  };
 
-const handleSignupComplete = () => {
-  setView({type: 'login', id: null});
-};
+  const handleSignupComplete = () => {
+    setView({ type: 'login', id: null });
+  };
 
   return (
     <div className="top">
-        {currentView.type === "login" && (
-            <Login
-                onLogin={handleLogin}
-                onSignup={handleSignup}
-                onGuest={handleGuestMode}
-                setView={setView}
-                setLoggedIn={setLoggedIn}
-                setUser={setUser}
-            />
-        )}
-        {currentView.type === "signup" && (
-            <SignupPage onSignupComplete={handleSignupComplete} />
-        )}
-        {currentView.type !== 'signup' && currentView.type !== 'login' && (
-          <>
-                <PageBanner
-                    user={user}
-                    setView={setView}
-                    posts={posts}
-                    setPosts={setPosts}
-                    currentView={currentView}
-                    comments={comments}
-                    setSearchResults={setSearchResults}
-                    setQuery={setQuery}
-                    query={query}
-                    isLoggedIn={loggedIn}
-                    setLoggedIn={setLoggedIn}
-                />
-                <NavBar
-                    user={user}
-                    setView={setView}
-                    communities={communities}
-                    currentView={currentView}
-                    setPosts={setPosts}
-                    posts={posts}
-                    isLoggedIn={loggedIn}
-                />
-                <MainContent
-                    user={user}
-                    currentView={currentView}
-                    setView={setView}
-                    communities={communities}
-                    setCommunities={setCommunities}
-                    posts={posts}
-                    setPosts={setPosts}
-                    comments={comments}
-                    setComments={setComments}
-                    searchResults={searchResults}
-                    setSearchResults={setSearchResults}
-                    currPostCount={currPostCount}
-                    setCount={setCount}
-                    linkFlair={linkFlair}
-                    setLinkFlair={setLinkFlair}
-                    query={query}
-                    isReply={isReply}
-                    setIsReply={setIsReply}
-                    commentID={commentID}
-                    setCommentID={setCommentID}
-                />
-            </>
-        )}
+      {currentView.type === "login" && (
+        <Login
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+          onGuest={handleGuestMode}
+          setView={setView}
+          setLoggedIn={setLoggedIn}
+          setUser={setUser}
+        />
+      )}
+      {currentView.type === "signup" && (
+        <SignupPage onSignupComplete={handleSignupComplete} />
+      )}
+      {currentView.type !== 'signup' && currentView.type !== 'login' && (
+        <>
+          <PageBanner
+            user={user}
+            setView={setView}
+            posts={posts}
+            setPosts={setPosts}
+            currentView={currentView}
+            comments={comments}
+            setSearchResults={setSearchResults}
+            setQuery={setQuery}
+            query={query}
+            isLoggedIn={loggedIn}
+            setLoggedIn={setLoggedIn}
+          />
+          <NavBar
+            user={user}
+            setView={setView}
+            communities={communities}
+            currentView={currentView}
+            userCommunities={userCommunities}
+            otherCommunities={otherCommunities}
+            setPosts={setPosts}
+            posts={posts}
+          />
+          <MainContent
+            user={user}
+            currentView={currentView}
+            setView={setView}
+            communities={communities}
+            setCommunities={setCommunities}
+            posts={posts}
+            setPosts={setPosts}
+            comments={comments}
+            setComments={setComments}
+            searchResults={searchResults}
+            setSearchResults={setSearchResults}
+            currPostCount={currPostCount}
+            setCount={setCount}
+            linkFlair={linkFlair}
+            setLinkFlair={setLinkFlair}
+            query={query}
+            isReply={isReply}
+            setIsReply={setIsReply}
+            commentID={commentID}
+            setCommentID={setCommentID}
+          />
+        </>
+      )}
 
     </div>
-);
+  );
 }
 
 export default App;

@@ -2,19 +2,24 @@ import React, { useState } from "react";
 
 export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
-    const handleTabChange = (tab) => setActiveTab(tab);
+    // const handleTabChange = (tab) => setActiveTab(tab);
+    const user = props.user;
+    console.log(user.communityIDs);
+    const communityIDs = user.communityIDs;
     return (
         <>
-            User DisplayName <br />
+            {/* User DisplayName <br />
             User Email   <br />
             Member since  <br />
             Reputation <br />
-            Listing with buttons and links etc<br />
+            Listing with buttons and links etc<br /> */}
+
+
             {/* User Info */}
-            {/* <h2>{user.displayName}</h2>
+            <h2>{user.displayName}</h2>
             <p>Email: {user.email}</p>
-            <p>Member since: {new Date(user.memberSince).toLocaleDateString()}</p>
-            <p>Reputation: {user.reputation}</p> */}
+            {/* <p>Member since: {new Date(user.memberSince).toLocaleDateString()}</p> */}
+            <p>Reputation: {user.reputation}</p>
 
             {/* Tabs for Listings */}
             {/* <div>
@@ -24,6 +29,8 @@ export default function Profile(props) {
             </div> */}
 
             {/* Listings */}
+
+            
             {/* {activeTab === "communities" && (
                 <ul>
                     {communities.map((community) => (

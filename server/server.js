@@ -21,11 +21,11 @@ mongoose.connect(mongoDB)
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.use(session({
-    secret: "temp",
-    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000, secure: false},
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1:27017/phreddit'}),
+  secret: "temp",
+  cookie: { httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000, secure: false },
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/phreddit' }),
 }));
 
 app.use((req, res, next) => {
@@ -62,15 +62,19 @@ const validateSession = async (req, res, next) => {
 app.get('/current-user', validateSession, (req, res) => {
   if (!req.user) {
     // Gracefully handle the not-logged-in case
-    return res.status(400).json({ loggedIn : false });
+    return res.status(400).json({ loggedIn: false });
   }
-  const { _id, displayName, email, createdAt } = req.user;
+  const { _id, displayName, email, isAdmin, reputation, communityIDs, postIDs, commentIDs } = req.user;
   res.status(200).json({
     loggedIn: true,
     id: _id,
     displayName,
     email,
-    createdAt,
+    isAdmin,
+    reputation,
+    communityIDs,
+    postIDs,
+    commentIDs
   });
 });
 
@@ -123,14 +127,14 @@ app.post('/create-post', async (req, res) => {
       }
     } else {
       console.log(req.body.linkFlairID);
-      let linkFlairObj = await LinkFlairs.findOne({content: req.body.linkFlairID});
+      let linkFlairObj = await LinkFlairs.findOne({ content: req.body.linkFlairID });
 
       if (!linkFlairObj) {
-        linkFlairObj = new LinkFlairs({content: req.body.linkFlairID});
+        linkFlairObj = new LinkFlairs({ content: req.body.linkFlairID });
         console.log(linkFlairObj);
         await linkFlairObj.save();
       }
-      
+
       postObject = {
         title: req.body.title,
         content: req.body.content,
@@ -138,9 +142,9 @@ app.post('/create-post', async (req, res) => {
         postedBy: req.body.postedBy,
       }
     }
-    const communities = await Community.findOne({name: req.body.communityName});
+    const communities = await Community.findOne({ name: req.body.communityName });
     //console.log("community backend" + communities);
-    
+
     let post = new Posts(postObject);
     //console.log(post);
     await post.save();
@@ -157,14 +161,14 @@ app.post('/create-post', async (req, res) => {
 
 app.post('/create-community', async (req, res) => {
   try {
-    console.log("inside" + typeof(req.body.members));
+    console.log("inside" + typeof (req.body.members));
     let communityObj = {
       name: req.body.name,
       description: req.body.description,
       members: [req.body.members]
     }
 
-    console.log(typeof(communityObj.members));
+    console.log(typeof (communityObj.members));
 
     let newCommunityObj = new Community(communityObj);
     await newCommunityObj.save();
@@ -175,7 +179,7 @@ app.post('/create-community', async (req, res) => {
   }
 });
 
-app.get('/communities/:id', async (req, res) =>  {
+app.get('/communities/:id', async (req, res) => {
   try {
     const community = await Community.findById(req.params.id);
     console.log("req id " + req.params.id);
@@ -192,7 +196,7 @@ app.post('/comments', async (req, res) => {
       content: req.body.content,
       commentedBy: req.body.commentedBy
     }
-    
+
     const newCommentObj = new Comments(commentObj);
     await newCommentObj.save();
 
@@ -219,10 +223,10 @@ app.post('/comments', async (req, res) => {
 
 app.patch('/views', async (req, res) => {
   try {
-     const post = await Posts.findById(req.body.postID);
-     post.views += 1;
-     await post.save();
-     res.status(200).json(post);
+    const post = await Posts.findById(req.body.postID);
+    post.views += 1;
+    await post.save();
+    res.status(200).json(post);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -232,7 +236,7 @@ app.post('/login', async (req, res) => {
   console.log("login session id: " + req.sessionID)
 
   try {
-    const email = await User.findOne({email: req.body.email});
+    const email = await User.findOne({ email: req.body.email });
     let errors = {};
 
     if (!email) {
@@ -250,14 +254,14 @@ app.post('/login', async (req, res) => {
     req.session.userId = email._id;
     res.send(validPassword);
   } catch (error) {
-      res.status(500).json("server error");
+    res.status(500).json("server error");
   }
 });
 
-app.post('/signup', async (req, res) => { 
+app.post('/signup', async (req, res) => {
   try {
-    const duplicateDisplayName = await User.findOne({displayName: req.body.displayName});
-    const duplicateEmail = await User.findOne({email: req.body.email});
+    const duplicateDisplayName = await User.findOne({ displayName: req.body.displayName });
+    const duplicateEmail = await User.findOne({ email: req.body.email });
 
     let errors = {};
 
@@ -300,7 +304,7 @@ app.post('/logout', async (req, res) => {
     }
     res.status(200).json({ message: "logout success" });
   });
-  
+
 });
 
-app.listen(8000, () => {console.log("Server listening on port 8000...");});
+app.listen(8000, () => { console.log("Server listening on port 8000..."); });
