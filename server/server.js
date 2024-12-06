@@ -233,6 +233,22 @@ app.post('/signup', async (req, res) => {
     3.Nicely styled feedback must be presented to the user if the account could not be created due to the above reasons or any otherreason.
     */
 
+    const duplicateDisplayName = await User.findOne({displayName: req.body.displayName});
+    const duplicateEmail = await User.findOne({email: req.body.email});
+
+    let errors = {};
+
+    if (duplicateDisplayName) {
+      errors.displayName = "Duplicate display name";
+    }
+
+    if (duplicateEmail) {
+      errors.email = "Duplicate email";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ errors });
+    }
 
     let newUser = {
       firstName: req.body.firstName,
