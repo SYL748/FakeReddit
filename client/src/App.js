@@ -57,9 +57,6 @@ function App() {
       });
       const allCommunities = response.data;
       setCommunities(allCommunities);
-      console.log(allCommunities);
-      console.log("FUCKKKKK      " + user.displayName);
-      console.log(user.communityIDs);
       // Separate communities into "created by user" and "not created by user"
       if (user) {
         const userCreated = allCommunities.filter((community) =>
