@@ -128,7 +128,8 @@ const handleSignupComplete = () => {
         {currentView.type === "signup" && (
             <SignupPage onSignupComplete={handleSignupComplete} />
         )}
-            <>
+        {currentView.type === 'home' && (
+          <>
                 <PageBanner
                     setView={setView}
                     posts={posts}
@@ -170,6 +171,8 @@ const handleSignupComplete = () => {
                     setCommentID={setCommentID}
                 />
             </>
+        )}
+
     </div>
 );
 }
