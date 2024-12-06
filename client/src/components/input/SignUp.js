@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TextInput from "./TextInput";
 import Button from "../general/Button";
 import './SignupPage.css';
+import axios from "axios";
 
 export default function SignupPage( {onSignupComplete} ) {
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ export default function SignupPage( {onSignupComplete} ) {
         });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let newErrors = {};
     
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,6 +50,23 @@ export default function SignupPage( {onSignupComplete} ) {
             setErrors(newErrors);
         } else {
             setIsSubmitting(true);
+
+            try {
+                console.log("post login in signup.js");
+                await axios.post('http://localhost:8000/signup',
+                    {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    displayName: formData.displayName,
+                    password: formData.password,
+                    }
+                );
+
+            } catch (error) {
+                console.log("error in signup client" + error);
+            }
+
             onSignupComplete();
         }
     };

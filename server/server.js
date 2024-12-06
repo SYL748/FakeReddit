@@ -30,30 +30,6 @@ const LinkFlairs = require('./models/linkflairs.js');
 const Posts = require('./models/posts.js');
 const User = require('./models/users.js');
 
-app.post('/login', async (req, res) => {
-    try {
-        console.log(req.body);
-        const {email, password} = req.body;
-        const user = await User.findOne({email});
-    
-        if (!user) {
-            //ask about handling errors
-            console.log("user not found");
-            return res.send(false);
-        }
-    
-        const validPassword = await bcrypt.compare(password, user.password);
-    
-        req.session.userId = user._id;
-        console.log(req.session.id);
-        console.log(validPassword);
-
-        res.send(validPassword);
-    } catch (error) {
-        res.status(500).send("server error");
-    }
-});
-
 app.get('/communities', async (req, res) => {
   try {
     const communities = await Community.find();
@@ -204,6 +180,46 @@ app.patch('/views', async (req, res) => {
      post.views += 1;
      await post.save();
      res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/login', async (req, res) => {
+  try {
+      //console.log(req.body);
+      const {email, password} = req.body;
+      const user = await User.findOne({email});
+  
+      if (!user) {
+          //ask about handling errors
+          console.log("user not found");
+          return res.send(false);
+      }
+  
+      const validPassword = await bcrypt.compare(password, user.password);
+  
+      req.session.userId = user._id;
+      res.send(validPassword);
+  } catch (error) {
+      res.status(500).json("server error");
+  }
+});
+
+app.post('/signup', async (req, res) => { 
+  try {
+    let newUser = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      displayName: req.body.displayName,
+      password: req.body.password,
+    }
+
+    let newUserObj = new User(newUser);
+    await newUserObj.save();
+
+    res.status(200).json(newUserObj);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
