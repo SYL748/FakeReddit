@@ -161,6 +161,7 @@ const handleSignupComplete = () => {
                     currentView={currentView}
                     setPosts={setPosts}
                     posts={posts}
+                    isLoggedIn={loggedIn}
                 />
                 <MainContent
                     user={user}

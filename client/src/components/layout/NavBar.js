@@ -17,22 +17,44 @@ function NavBar(props) {
             />
             <Delimiter />
             <h2>Communities</h2>
-            <Button onClick={() => props.setView({type:'create-community', id: null})}
+            {props.isLoggedIn ? (
+                <Button onClick={() => props.setView({type:'create-community', id: null})}
                 className={`button ${isCreateCommunityView ? 'create-community-active' : 'hover-orange'}`}
                 buttonName="Create Community"
             />
+            ) : (
+                <Button
+                className={`button gray default-cursor`}
+                buttonName="Create Community"
+            />
+            )}
 
-            {props.communities.map((community) => {
-                const isActiveCommunity = props.currentView.id === community._id;
-                return (
-                    <Button onClick={() => props.setView({type: "community", id:community._id})}
-                        // className="button hover-gray"
-                        className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
-                        buttonName={community.name}
-                        key={community._id}
-                    />
-                );
-            })}
+            {props.isLoggedIn ? (
+                    sortedCommunities.map((community) => {
+                        const isActiveCommunity = props.currentView.id === community._id;
+                        return (
+                            <Button onClick={() => props.setView({type: "community", id:community._id})}
+                                // className="button hover-gray"
+                                className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
+                                buttonName={community.name}
+                                key={community._id}
+                            /> 
+                        );
+                    })
+                    
+                    ) : (
+                            props.communities.map((community) => {
+                                const isActiveCommunity = props.currentView.id === community._id;
+                                return (
+                                    <Button onClick={() => props.setView({type: "community", id:community._id})}
+                                        // className="button hover-gray"
+                                        className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
+                                        buttonName={community.name}
+                                        key={community._id}
+                                    /> 
+                                );
+                            })
+                        )}
         </div>
     );
 }

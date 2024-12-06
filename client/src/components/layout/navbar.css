@@ -19,3 +19,11 @@
 .nav-bar::-webkit-scrollbar {
     display: none;
 }
+
+.gray {
+    background-color: darkgray;
+}
+
+.default-cursor {
+    cursor: default;
+}
