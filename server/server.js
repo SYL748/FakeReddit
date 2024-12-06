@@ -22,7 +22,7 @@ mongoose.connect(mongoDB)
 
 app.use(session({
     secret: "temp",
-    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000, secure: false}, //temp age
+    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000, secure: false},
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1:27017/phreddit'}),
@@ -226,6 +226,13 @@ app.post('/signup', async (req, res) => {
     it's an invalid email/display name and do not allow creation of new user. 
     This can probably be done using get check or done in the Signup.js?
     */
+
+    /*
+    1. No two users can create an account with the same email or display name.  
+    2. The typed password should not contain their first or last name, their display name, or their email id. 
+    3.Nicely styled feedback must be presented to the user if the account could not be created due to the above reasons or any otherreason.
+    */
+
 
     let newUser = {
       firstName: req.body.firstName,
