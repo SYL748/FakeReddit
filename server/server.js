@@ -30,7 +30,7 @@ app.use(session({
 
 app.use((req, res, next) => {
   console.log("Session ID:", req.sessionID);
-  console.log(req.session.userId)
+  console.log("User ID: " + req.session.userId);
   next();
 });
 
