@@ -287,7 +287,7 @@ async function initializeDB() {
 
     await UserModel.findByIdAndUpdate(
         user1Ref._id, // Find the user by ID
-        { $push: { communityIDs: { $each: [communityRef1._id, communityRef2._id] } } }, // Push the new community IDs
+        { $push: { communityIDs: { $each: [communityRef2._id] } } }, // Push the new community IDs
         { new: true } // Optionally return the updated document
       );
 

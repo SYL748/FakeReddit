@@ -192,6 +192,7 @@ function App() {
             otherCommunities={otherCommunities}
             setPosts={setPosts}
             posts={posts}
+            isLoggedIn={loggedIn}
           />
           <MainContent
             user={user}
