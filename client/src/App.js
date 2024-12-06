@@ -128,7 +128,7 @@ const handleSignupComplete = () => {
         {currentView.type === "signup" && (
             <SignupPage onSignupComplete={handleSignupComplete} />
         )}
-        {currentView.type === 'home' && (
+        {currentView.type !== 'signup' && currentView.type !== 'login' && (
           <>
                 <PageBanner
                     setView={setView}
