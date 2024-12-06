@@ -1,3 +1,14 @@
+/*
+TODO: 
+    No two users can create an account with the same email or display name.
+    The typed password should not contain their first or last name
+    Feedback must be presented to the user if the account could not be created
+        - Add an account created successfully.
+        - Add an email not found when logging in.
+        - Add error messages for the above errors.
+*/
+
+
 import React, { useState } from "react";
 import TextInput from "./TextInput";
 import Button from "../general/Button";

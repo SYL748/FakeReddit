@@ -208,6 +208,15 @@ app.post('/login', async (req, res) => {
 
 app.post('/signup', async (req, res) => { 
   try {
+    //Check if the email or displayname already exists in the database, if it does
+    //it's an invalid email/displayname and redirect back to the sign up with error
+
+    /*
+    Check if the email or display name already exists in the database, if it does
+    it's an invalid email/display name and do not allow creation of new user. 
+    This can probably be done using get check or done in the Signup.js?
+    */
+
     let newUser = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
