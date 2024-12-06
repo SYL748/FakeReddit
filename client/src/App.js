@@ -13,6 +13,7 @@ import SignupPage from './components/input/SignUp';
 function App() {
   const [currentView, setView] = useState({ type: "login", id: null });
   const [loggedIn, setLoggedIn] = useState(false);
+  const [guest, setGuest] = useState(false);
   const [communities, setCommunities] = useState([]);
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
@@ -60,16 +61,18 @@ function App() {
       console.log("FUCKKKKK      " + user.displayName);
       console.log(user.communityIDs);
       // Separate communities into "created by user" and "not created by user"
-      const userCreated = allCommunities.filter((community) =>
-        user.communityIDs.includes(community._id)
-      );
-      console.log("DSAFDSAFSADFAS:   " + userCreated);
-      userCreated.map(community => console.log(community.name));
-      const others = allCommunities.filter(
-        (community) => !user.communityIDs.includes(community._id)
-      );
-      setUserCommunities(userCreated);
-      setOtherCommunities(others);
+      if (user) {
+        const userCreated = allCommunities.filter((community) =>
+          user.communityIDs.includes(community._id)
+        );
+        console.log("DSAFDSAFSADFAS:   " + userCreated);
+        userCreated.map(community => console.log(community.name));
+        const others = allCommunities.filter(
+          (community) => !user.communityIDs.includes(community._id)
+        );
+        setUserCommunities(userCreated);
+        setOtherCommunities(others);
+      }
     } catch (error) {
       console.error("Error fetching communities:", error);
     }
@@ -120,7 +123,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user) {
+        if (loggedIn || guest) {
           await fetchCommunities();
           await fetchPosts();
           await fetchComments();
@@ -140,6 +143,7 @@ function App() {
 
   const handleGuestMode = () => {
     setLoggedIn(false);
+    setGuest(true);
     setView({ type: 'home', id: null });
   };
 
@@ -160,6 +164,7 @@ function App() {
           onGuest={handleGuestMode}
           setView={setView}
           setLoggedIn={setLoggedIn}
+          setGuest = {setGuest}
           setUser={setUser}
         />
       )}
