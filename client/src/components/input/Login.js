@@ -30,7 +30,7 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
             setErrors(newErrors);
         } else {
             setIsSubmitting(true);
-
+            axios.defaults.withCredentials = true;
             try {
                 console.log("post login in login.js");
                 const res = await axios.post('http://localhost:8000/login',

@@ -7,7 +7,11 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  credentials: true,              // Allow cookies to be sent
+}));
 app.use(express.json());
 
 const mongoose = require('mongoose');
@@ -18,7 +22,7 @@ mongoose.connect(mongoDB)
 
 app.use(session({
     secret: "temp",
-    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 120302103, secure: false}, //temp age
+    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 24 * 60 * 60 * 1000, secure: false}, //temp age
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1:27017/phreddit'}),
@@ -240,7 +244,7 @@ app.post('/signup', async (req, res) => {
 });
 
 app.post('/logout', async (req, res) => {
-  console.log(req.sessionID);
+  console.log("logging out: ", req.sessionID);
 
   req.session.destroy((err) => {
     if (err) {

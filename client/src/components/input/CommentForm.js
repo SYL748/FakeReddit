@@ -72,6 +72,7 @@ export default function CommentForm(props) {
             const addComment = async (newComment) => {
                 try {
                     console.log("adding new comment");
+                    axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/comments', newComment);
                     console.log(res);
                 } catch (error) {

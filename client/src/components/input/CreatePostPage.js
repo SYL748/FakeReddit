@@ -85,6 +85,7 @@ export default function CreatePostPage(props) {
             const addPost = async (newPost) => {
                 try {
                     console.log("adding new post");
+                    axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/create-post', newPost);
                     console.log(res);
                 } catch (error) {

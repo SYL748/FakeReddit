@@ -25,6 +25,7 @@ function App() {
 
   const fetchCommunities = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const response = await axios.get('http://localhost:8000/communities');
       setCommunities(response.data);
     } catch (error) {
@@ -34,6 +35,7 @@ function App() {
 
   const fetchPosts = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const response = await axios.get('http://localhost:8000/posts');
       setPosts(sortNewest(response.data));
       setCount(response.data.length);
@@ -44,6 +46,7 @@ function App() {
 
   const fetchComments = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const response = await axios.get('http://localhost:8000/comments');
       setComments(response.data);
     } catch (error) {
@@ -53,6 +56,7 @@ function App() {
 
   const fetchLinkFlairs = async () => {
     try {
+      axios.defaults.withCredentials = true;
       const response = await axios.get('http://localhost:8000/linkflairs');
       setLinkFlair(response.data);
     } catch (error) {

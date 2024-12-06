@@ -57,6 +57,7 @@ export default function CreateCommunity(props) {
             const addCommunity = async (newCommunity) => {
                 try {
                     console.log("adding community");
+                    axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/create-community', newCommunity);
                     console.log("finish community");
                     newCommunityID = res.data;
