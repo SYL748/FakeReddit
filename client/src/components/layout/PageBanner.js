@@ -49,7 +49,7 @@ function PageBanner(props) {
                     buttonName="Profile" />
                     <Button 
                     onClick={handleLogout}
-                    className={`button ${isProfileView ? 'profile-active' : 'hover-orange'}`}
+                    className={'button hover-orange'}
                     buttonName="Log Out"/>
                     </>
                 ) : null}
