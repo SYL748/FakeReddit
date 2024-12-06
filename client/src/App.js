@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { sortNewest } from './components/utils/SortingUtil';
 import axios from 'axios';
 import Login from './components/input/Login'
-import Button from './components/general/Button';
 import SignupPage from './components/input/SignUp';
 
 function App() {
@@ -99,7 +98,7 @@ const handleLogin = () => {
 };
 
 const handleGuestMode = () => {
-  setLoggedIn(true);
+  setLoggedIn(false);
   setView({type: 'home', id: null});
 };
 
@@ -110,51 +109,7 @@ const handleSignup = () => {
 const handleSignupComplete = () => {
   setView({type: 'login', id: null});
 };
-  // return (
-  //   <div className="top">
-  //     <PageBanner
-  //       setView={setView}
-  //       posts={posts}
-  //       setPosts={setPosts}
-  //       currentView={currentView}
-  //       comments={comments}
-  //       setSearchResults={setSearchResults}
-  //       setQuery={setQuery}
-  //       query={query}
-  //     />
-  //     <NavBar
-  //       setView={setView}
-  //       communities={communities}
-  //       currentView={currentView}
-  //       setPosts={setPosts}
-  //       posts={posts}
-  //     />
-  //     <MainContent
-  //       currentView={currentView}
-  //       setView={setView}
-  //       communities={communities}
-  //       setCommunities={setCommunities}
-  //       posts={posts}
-  //       setPosts={setPosts}
-  //       comments={comments}
-  //       setComments={setComments}
-  //       searchResults={searchResults}
-  //       setSearchResults={setSearchResults}
-  //       currPostCount={currPostCount}
-  //       setCount={setCount}
-  //       linkFlair={linkFlair}
-  //       setLinkFlair={setLinkFlair}
-  //       query={query}
-  //       isReply={isReply}
-  //       setIsReply={setIsReply}
-  //       commentID={commentID}
-  //       setCommentID={setCommentID}
-  //     />
-  //     <Login />
-  //     <SignupPage />
 
-  //   </div>
-  // );
   return (
     <div className="top">
         {currentView.type === "login" && (
@@ -179,6 +134,8 @@ const handleSignupComplete = () => {
                     setSearchResults={setSearchResults}
                     setQuery={setQuery}
                     query={query}
+                    isLoggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
                 />
                 <NavBar
                     setView={setView}

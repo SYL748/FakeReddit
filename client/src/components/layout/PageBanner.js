@@ -3,10 +3,25 @@ import SearchBar from './SearchBox'
 import Button from '../general/Button'
 import './pagebanner.css'
 import { sortNewest } from '../utils/SortingUtil';
+import axios from 'axios';
 
 function PageBanner(props) {
     const isCreatePostView = props.currentView.type === 'create-post';
     const isProfileView = props.currentView.type === 'profile';
+
+    const handleLogout = async () => {
+        try {
+            console.log("here in client");
+            await axios.post('http://localhost:8000/logout');
+            props.setLoggedIn(false);
+            console.log("set logged out" + props.isLoggedIn);
+            props.setView({ type: 'login', id: null });
+        } catch (error) {
+            console.error("error in logout" + error);
+        }
+    };
+    
+    console.log(props.isLoggedIn);
     return (
         <header className="banner">
             <Logo setView={() => {
@@ -26,10 +41,18 @@ function PageBanner(props) {
                     onClick={() => props.setView({ type: 'create-post', id: null })}
                     className={`button ${isCreatePostView ? 'create-post-active' : 'hover-orange'}`}
                     buttonName="Create Post" />
-                <Button
+                {props.isLoggedIn ? (
+                    <>
+                    <Button
                     onClick={() => props.setView({type: 'profile', id: null})}
                     className={`button ${isProfileView ? 'profile-active' : 'hover-orange'}`}
                     buttonName="Profile" />
+                    <Button 
+                    onClick={handleLogout}
+                    className={`button ${isProfileView ? 'profile-active' : 'hover-orange'}`}
+                    buttonName="Log Out"/>
+                    </>
+                ) : null}
             </div>
         </header>
     );

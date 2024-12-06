@@ -42,7 +42,7 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
 
                 if (res.data) { //if this is true, logged in
                     setView({type:'home', id: null});
-                    setLoggedIn = true;
+                    setLoggedIn(true);
                 }
         
             } catch (error) {

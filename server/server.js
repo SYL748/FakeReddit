@@ -18,11 +18,16 @@ mongoose.connect(mongoDB)
 
 app.use(session({
     secret: "temp",
-    cookie: {httpOnly: true, sameSite: 'none', maxAge: 120302103, secure: false}, //temp age
+    cookie: {httpOnly: true, sameSite: 'lax', maxAge: 120302103, secure: false}, //temp age
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({mongoUrl: 'mongodb://127.0.0.1:27017/phreddit'}),
 }));
+
+app.use((req, res, next) => {
+  console.log("Session ID:", req.sessionID);
+  next();
+});
 
 const Community = require('./models/communities.js');
 const Comments = require('./models/comments.js');
@@ -124,7 +129,6 @@ app.post('/create-community', async (req, res) => {
 
     let newCommunityObj = new Community(communityObj);
     await newCommunityObj.save();
-    console.log("is it coming here");
 
     res.status(200).json(newCommunityObj);
   } catch (error) {
@@ -186,8 +190,9 @@ app.patch('/views', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+  console.log("login session id: " + req.sessionID)
+
   try {
-      //console.log(req.body);
       const {email, password} = req.body;
       const user = await User.findOne({email});
   
@@ -232,6 +237,19 @@ app.post('/signup', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+});
+
+app.post('/logout', async (req, res) => {
+  console.log(req.sessionID);
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("session destroy error ", err);
+      return res.status(500).json({ message: "session destroy error " });
+    }
+    res.status(200).json({ message: "logout success" });
+  });
+  
 });
 
 app.listen(8000, () => {console.log("Server listening on port 8000...");});
