@@ -4,7 +4,7 @@ import Button from "../general/Button";
 import './WelcomePage.css';
 import axios from "axios";
 
-export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLoggedIn }) {
+export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLoggedIn, setUser}) {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({ email: "", password: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +39,18 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
                     password: formData.password,
                     }
                 );
+
+                console.log("before second axios")
+
+                try {
+                    console.log("calling current axios");
+                    const userRes = await axios.get('http://localhost:8000/current-user');
+                    console.log(userRes);
+                    setUser(userRes.data);
+                } catch (errorRes) {
+                    setView({type:'login', id: null});
+                    setLoggedIn(false);
+                }
 
                 if (res.data) { //if this is true, logged in
                     setView({type:'home', id: null});

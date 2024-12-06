@@ -30,16 +30,11 @@ function App() {
         withCredentials: true,
       });
       console.log("Current user fetched successfully:", response.data);
-      setLoggedIn(true);
       setUser(response.data);
+      handleLogin();
     } catch (error) {
-      if (error.response && error.response.status === 404) {
-        console.log("User not found");
-      } else if (error.response && error.response.status === 401) {
-        console.log("Not logged in");
-      } else {
-        console.error("Error fetching current user");
-      }
+      console.log(error);
+      handleSignupComplete();
     }
   };
   const fetchCommunities = async () => {
@@ -82,21 +77,21 @@ function App() {
       console.error("Error fetching link flairs:", error);
     }
   };
-  // useEffect(() => {
-  //   console.log('Updated currentView:', currentView); // Debug
-  // }, [currentView]);
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        await fetchCurrentUser();
+      } catch (error) {
+        console.error('error login status', error.message);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // if (currentView.type === 'community' && currentView.id) {
-        //   console.log(`Fetching community with ID: ${currentView.id}`);
-        //   await fetchCommunityById(currentView.id);
-        // } else if (currentView.type === 'post' && currentView.id) {
-        //   console.log(`Fetching post with ID: ${currentView.id}`);
-        //   await fetchPostById(currentView.id);
-        // } else if (currentView.type === 'home') {
-        // console.log('Fetching home data...');
         await fetchCommunities();
         // console.log('Fetching communities...');
         await fetchPosts();
@@ -104,11 +99,7 @@ function App() {
         await fetchComments();
         // console.log('Fetching comments...');
         await fetchLinkFlairs();
-        await fetchCurrentUser();
         // console.log('Fetching link flairs...');
-        // } else {
-        //   console.error('Unknown view type:', currentView.type);
-        // }
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -143,6 +134,7 @@ const handleSignupComplete = () => {
                 onGuest={handleGuestMode}
                 setView={setView}
                 setLoggedIn={setLoggedIn}
+                setUser={setUser}
             />
         )}
         {currentView.type === "signup" && (

@@ -62,21 +62,11 @@ const validateSession = async (req, res, next) => {
 app.get('/current-user', validateSession, (req, res) => {
   if (!req.user) {
     // Gracefully handle the not-logged-in case
-    return res.status(200).json({ loggedIn: false });
+    return res.status(400).json({ loggedIn : false });
   }
   const { _id, displayName, email, createdAt } = req.user;
   res.status(200).json({
     loggedIn: true,
-    id: _id,
-    displayName,
-    email,
-    createdAt,
-  });
-});
-
-app.get('/current-user', validateSession, (req, res) => {
-  const { _id, displayName, email, createdAt } = req.user;
-  res.status(200).json({
     id: _id,
     displayName,
     email,
