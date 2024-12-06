@@ -117,18 +117,18 @@ function MainContent(props) {
       />
     );
   }
-  else if(type === 'profile') { 
+  else if (type === 'profile') {
     content = (
       <Profile
-
+        user={props.user}
       />
     );
   } else {
-      content = (
-        <div>
-          <h1>ERROR: Unknown View</h1>
-        </div>
-      );
+    content = (
+      <div>
+        <h1>ERROR: Unknown View</h1>
+      </div>
+    );
   }
 
   return <div className="main-content">{content}</div>;

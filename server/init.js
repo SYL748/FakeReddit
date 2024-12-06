@@ -149,7 +149,7 @@ async function initializeDB() {
     //LINK FLAIRS FROM PREV HW
     const linkFlair1 = {
         linkFlairID: 'lf1',
-        content: 'The jerkstore called...', 
+        content: 'The jerkstore called...',
     };
     const linkFlair2 = {
         linkFlairID: 'lf2',
@@ -179,7 +179,7 @@ async function initializeDB() {
     };
 
     let commentRef7 = await createComment(comment7);
-    
+
     const comment6 = {
         commentID: 'comment6',
         content: 'I want to believe.',
@@ -207,9 +207,9 @@ async function initializeDB() {
         commentedBy: user2Ref.displayName,
         commentedDate: new Date('September 10, 2024 6:41:00'),
     };
-    
+
     let commentRef4 = await createComment(comment4);
-    
+
     const comment3 = {
         commentID: 'comment3',
         content: 'My brother in Christ, are you ok? Also, YTJ.',
@@ -284,7 +284,13 @@ async function initializeDB() {
     };
     let communityRef1 = await createCommunity(community1);
     let communityRef2 = await createCommunity(community2);
-    
+
+    await UserModel.findByIdAndUpdate(
+        user1Ref._id, // Find the user by ID
+        { $push: { communityIDs: { $each: [communityRef1._id, communityRef2._id] } } }, // Push the new community IDs
+        { new: true } // Optionally return the updated document
+      );
+
     if (db) {
         db.close();
     }
