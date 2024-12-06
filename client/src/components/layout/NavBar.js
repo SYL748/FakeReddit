@@ -30,32 +30,17 @@ function NavBar(props) {
             />
             )}
 
-            {props.isLoggedIn ? (
-                    sortedCommunities.map((community) => {
-                        const isActiveCommunity = props.currentView.id === community._id;
-                        return (
-                            <Button onClick={() => props.setView({type: "community", id:community._id})}
-                                // className="button hover-gray"
-                                className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
-                                buttonName={community.name}
-                                key={community._id}
-                            /> 
-                        );
-                    })
-                    
-                    ) : (
-                            props.communities.map((community) => {
-                                const isActiveCommunity = props.currentView.id === community._id;
-                                return (
-                                    <Button onClick={() => props.setView({type: "community", id:community._id})}
-                                        // className="button hover-gray"
-                                        className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
-                                        buttonName={community.name}
-                                        key={community._id}
-                                    /> 
-                                );
-                            })
-                        )}
+            {props.communities.map((community) => {
+                const isActiveCommunity = props.currentView.id === community._id;
+                return (
+                    <Button onClick={() => props.setView({type: "community", id:community._id})}
+                        // className="button hover-gray"
+                        className={`fix-overflow button ${isActiveCommunity ? 'community-active' : 'hover-gray'}`}
+                        buttonName={community.name}
+                        key={community._id}
+                    />
+                );
+            })}
         </div>
     );
 }
