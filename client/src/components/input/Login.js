@@ -4,7 +4,7 @@ import Button from "../general/Button";
 import './WelcomePage.css';
 import axios from "axios";
 
-export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLoggedIn, setUser}) {
+export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLoggedIn, setUser, setGuest}) {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({ email: "", password: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +55,7 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
                 if (res.data) { //if this is true, logged in
                     setView({type:'home', id: null});
                     setLoggedIn(true);
+                    setGuest(false);
                 }
         
             } catch (error) {
