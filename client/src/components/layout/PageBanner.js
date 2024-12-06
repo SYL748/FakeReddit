@@ -8,6 +8,9 @@ import axios from 'axios';
 function PageBanner(props) {
     const isCreatePostView = props.currentView.type === 'create-post';
     const isProfileView = props.currentView.type === 'profile';
+    if(props.user){
+        const userName = props.user.displayName;
+    }
 
     const handleLogout = async () => {
         try {
