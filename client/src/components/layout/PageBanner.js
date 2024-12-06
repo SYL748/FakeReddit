@@ -8,6 +8,7 @@ import axios from 'axios';
 function PageBanner(props) {
     const isCreatePostView = props.currentView.type === 'create-post';
     const isProfileView = props.currentView.type === 'profile';
+    const userName = props.user.displayName;
 
     const handleLogout = async () => {
         try {
@@ -46,7 +47,7 @@ function PageBanner(props) {
                     <Button
                     onClick={() => props.setView({type: 'profile', id: null})}
                     className={`button ${isProfileView ? 'profile-active' : 'hover-orange'}`}
-                    buttonName="Profile" />
+                    buttonName={userName} />
                     <Button 
                     onClick={handleLogout}
                     className={'button hover-orange'}

@@ -40,6 +40,50 @@ const LinkFlairs = require('./models/linkflairs.js');
 const Posts = require('./models/posts.js');
 const User = require('./models/users.js');
 
+
+const validateSession = async (req, res, next) => {
+  try {
+    if (!req.session.userId) {
+      req.user = null; // Allow the request to continue without user data
+      return next(); // Continue to the next middleware or route handler
+    }
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      req.user = null;
+      return next();
+    }
+    req.user = user; // Attach user data to the request
+    next();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+app.get('/current-user', validateSession, (req, res) => {
+  if (!req.user) {
+    // Gracefully handle the not-logged-in case
+    return res.status(200).json({ loggedIn: false });
+  }
+  const { _id, displayName, email, createdAt } = req.user;
+  res.status(200).json({
+    loggedIn: true,
+    id: _id,
+    displayName,
+    email,
+    createdAt,
+  });
+});
+
+app.get('/current-user', validateSession, (req, res) => {
+  const { _id, displayName, email, createdAt } = req.user;
+  res.status(200).json({
+    id: _id,
+    displayName,
+    email,
+    createdAt,
+  });
+});
+
 app.get('/communities', async (req, res) => {
   try {
     const communities = await Community.find();

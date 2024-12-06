@@ -22,7 +22,26 @@ function App() {
   const [query, setQuery] = useState('');
   const [isReply, setIsReply] = useState(false);
   const [commentID, setCommentID] = useState('');
+  const [user, setUser] = useState(null);
 
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/current-user', {
+        withCredentials: true,
+      });
+      console.log("Current user fetched successfully:", response.data);
+      setLoggedIn(true);
+      setUser(response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log("User not found");
+      } else if (error.response && error.response.status === 401) {
+        console.log("Not logged in");
+      } else {
+        console.error("Error fetching current user");
+      }
+    }
+  };
   const fetchCommunities = async () => {
     try {
       axios.defaults.withCredentials = true;
@@ -63,9 +82,9 @@ function App() {
       console.error("Error fetching link flairs:", error);
     }
   };
-  useEffect(() => {
-    console.log('Updated currentView:', currentView); // Debug
-  }, [currentView]);
+  // useEffect(() => {
+  //   console.log('Updated currentView:', currentView); // Debug
+  // }, [currentView]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,15 +96,16 @@ function App() {
         //   console.log(`Fetching post with ID: ${currentView.id}`);
         //   await fetchPostById(currentView.id);
         // } else if (currentView.type === 'home') {
-        console.log('Fetching home data...');
+        // console.log('Fetching home data...');
         await fetchCommunities();
-        console.log('Fetching communities...');
+        // console.log('Fetching communities...');
         await fetchPosts();
-        console.log('Fetching posts...');
+        // console.log('Fetching posts...');
         await fetchComments();
-        console.log('Fetching comments...');
+        // console.log('Fetching comments...');
         await fetchLinkFlairs();
-        console.log('Fetching link flairs...');
+        await fetchCurrentUser();
+        // console.log('Fetching link flairs...');
         // } else {
         //   console.error('Unknown view type:', currentView.type);
         // }
@@ -131,6 +151,7 @@ const handleSignupComplete = () => {
         {currentView.type !== 'signup' && currentView.type !== 'login' && (
           <>
                 <PageBanner
+                    user={user}
                     setView={setView}
                     posts={posts}
                     setPosts={setPosts}
@@ -143,6 +164,7 @@ const handleSignupComplete = () => {
                     setLoggedIn={setLoggedIn}
                 />
                 <NavBar
+                    user={user}
                     setView={setView}
                     communities={communities}
                     currentView={currentView}
@@ -150,6 +172,7 @@ const handleSignupComplete = () => {
                     posts={posts}
                 />
                 <MainContent
+                    user={user}
                     currentView={currentView}
                     setView={setView}
                     communities={communities}
