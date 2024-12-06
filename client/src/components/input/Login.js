@@ -46,7 +46,15 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
                 }
         
             } catch (error) {
-                console.log("error in login client" + error);
+                console.log(error);
+                const errors = error.response.data.errors;
+                if (errors.email) {
+                    setErrors({email: "Email does not exist."});
+                } else if (errors.validPassword) {
+                    setErrors({password: "Wrong password. Try again."});
+                } else {
+                    console.log("Login client side error " + error);
+                }
             }
         }
 

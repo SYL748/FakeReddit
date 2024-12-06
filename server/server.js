@@ -198,19 +198,23 @@ app.post('/login', async (req, res) => {
   console.log("login session id: " + req.sessionID)
 
   try {
-      const {email, password} = req.body;
-      const user = await User.findOne({email});
-  
-      if (!user) {
-          //ask about handling errors
-          console.log("user not found");
-          return res.send(false);
-      }
-  
-      const validPassword = await bcrypt.compare(password, user.password);
-  
-      req.session.userId = user._id;
-      res.send(validPassword);
+    const email = await User.findOne({email: req.body.email});
+    let errors = {};
+
+    if (!email) {
+      errors.email = "Email does not exist.";
+      return res.status(400).json({ errors });
+    }
+
+    const validPassword = await bcrypt.compare(req.body.password, email.password);
+
+    if (!validPassword) {
+      errors.validPassword = "Wrong password."
+      return res.status(400).json({ errors });
+    }
+
+    req.session.userId = email._id;
+    res.send(validPassword);
   } catch (error) {
       res.status(500).json("server error");
   }
@@ -218,21 +222,6 @@ app.post('/login', async (req, res) => {
 
 app.post('/signup', async (req, res) => { 
   try {
-    //Check if the email or displayname already exists in the database, if it does
-    //it's an invalid email/displayname and redirect back to the sign up with error
-
-    /*
-    Check if the email or display name already exists in the database, if it does
-    it's an invalid email/display name and do not allow creation of new user. 
-    This can probably be done using get check or done in the Signup.js?
-    */
-
-    /*
-    1. No two users can create an account with the same email or display name.  
-    2. The typed password should not contain their first or last name, their display name, or their email id. 
-    3.Nicely styled feedback must be presented to the user if the account could not be created due to the above reasons or any otherreason.
-    */
-
     const duplicateDisplayName = await User.findOne({displayName: req.body.displayName});
     const duplicateEmail = await User.findOne({email: req.body.email});
 
