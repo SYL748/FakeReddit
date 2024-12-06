@@ -33,7 +33,6 @@ function App() {
       setUser(response.data);
       handleLogin();
     } catch (error) {
-      console.log(error);
       handleSignupComplete();
     }
   };
