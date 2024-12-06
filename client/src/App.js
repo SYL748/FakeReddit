@@ -55,6 +55,7 @@ function App() {
         withCredentials: true,
       });
       const allCommunities = response.data;
+      setCommunities(allCommunities);
       console.log(allCommunities);
       console.log("FUCKKKKK      " + user.displayName);
       console.log(user.communityIDs);

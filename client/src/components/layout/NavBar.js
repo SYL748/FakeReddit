@@ -6,6 +6,7 @@ import { sortNewest } from '../utils/SortingUtil';
 function NavBar(props) {
     const isHomeView = props.currentView.type === 'home';
     const isCreateCommunityView = props.currentView.type === 'create-community';
+    console.log(props.communities);
     return (
         <div className="nav-bar">
             <Button onClick={() => {
