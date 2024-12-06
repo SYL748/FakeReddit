@@ -24,10 +24,16 @@ function PageBanner(props) {
     console.log(props.isLoggedIn);
     return (
         <header className="banner">
-            <Logo setView={() => {
-                props.setPosts(sortNewest(props.posts));  // Sort posts by newest when clicking the logo
-                props.setView({ type: 'home', id: null });  // Navigate to home view
-            }} />
+            {props.isLoggedIn ? (
+                <Logo setView={() => {
+                    props.setPosts(sortNewest(props.posts));  // Sort posts by newest when clicking the logo
+                    props.setView({ type: 'home', id: null });  // Navigate to home view
+                }} />
+            ) : (
+                <Logo setView={() => {
+                    props.setView({ type: 'login', id: null });
+                }} />
+            ) }
             <SearchBar
                 setView={props.setView}
                 posts={props.posts}
@@ -37,12 +43,13 @@ function PageBanner(props) {
                 query={props.query}
             />
             <div className="banner-buttons">
-                <Button
+                
+                {props.isLoggedIn ? (
+                    <>
+                    <Button
                     onClick={() => props.setView({ type: 'create-post', id: null })}
                     className={`button ${isCreatePostView ? 'create-post-active' : 'hover-orange'}`}
                     buttonName="Create Post" />
-                {props.isLoggedIn ? (
-                    <>
                     <Button
                     onClick={() => props.setView({type: 'profile', id: null})}
                     className={`button ${isProfileView ? 'profile-active' : 'hover-orange'}`}
@@ -52,7 +59,16 @@ function PageBanner(props) {
                     className={'button hover-orange'}
                     buttonName="Log Out"/>
                     </>
-                ) : null}
+                ) : (
+                    <>
+                    <Button
+                    className={`button gray default-cursor`}
+                    buttonName="Create Post" />
+                    <Button
+                    className="button gray default-cursor"
+                    buttonName="Guest"/>
+                    </>
+                )}
             </div>
         </header>
     );

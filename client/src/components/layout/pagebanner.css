@@ -15,3 +15,11 @@
     align-items: center;
     gap: 1rem;
 }
+
+.gray {
+    background-color: darkgray;
+}
+
+.default-cursor {
+    cursor: default;
+}
