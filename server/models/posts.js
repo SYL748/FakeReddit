@@ -12,6 +12,7 @@ const PostSchema = new Schema(
         postedDate: {type: Date, default: Date.now},
         commentIDs: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
         views: {type: Number, required: true, default: 0},
+        upvotes: {type: Number, required: true, default: 0},
     }
 );
 

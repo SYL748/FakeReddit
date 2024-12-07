@@ -63,6 +63,7 @@ function createPost(postObj) {
         views: postObj.views,
         linkFlairIDs: postObj.linkFlairIDs,
         commentIDs: postObj.commentIDs,
+        upvotes: postObj.upvotes,
     });
     return newPostDoc.save();
 }
@@ -128,6 +129,7 @@ async function initializeDB() {
         communityIDs: [],
         postIDs: [],
         commentIDs: [],
+        creationDate: new Date('July 19, 2022 7:21:00'),
     };
 
     const user2 = {
@@ -141,6 +143,7 @@ async function initializeDB() {
         communityIDs: [],
         postIDs: [],
         commentIDs: [],
+        creationDate: new Date('September 6, 2023 6:41:00'),
     };
 
     let user1Ref = await createUser(user1);
@@ -249,6 +252,7 @@ async function initializeDB() {
         postedDate: new Date('August 23, 2024 01:19:00'),
         commentIDs: [commentRef1, commentRef2],
         views: 14,
+        upvotes: 10,
     };
     const post2 = {
         postID: 'p2',
@@ -259,6 +263,7 @@ async function initializeDB() {
         postedDate: new Date('September 9, 2024 14:24:00'),
         commentIDs: [commentRef4, commentRef5],
         views: 1023,
+        upvotes: 15,
     };
     let postRef1 = await createPost(post1);
     let postRef2 = await createPost(post2);

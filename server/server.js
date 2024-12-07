@@ -232,6 +232,16 @@ app.patch('/views', async (req, res) => {
   }
 });
 
+app.post('/upvotes', async (req, res) => {
+  try {
+    const post = await Posts.findById(req.body.postID);
+    return res.status(200).json({upvotes: post.upvotes});
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  } 
+});
+
 app.post('/login', async (req, res) => {
   console.log("login session id: " + req.sessionID)
 
