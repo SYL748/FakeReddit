@@ -195,6 +195,7 @@ function App() {
             isLoggedIn={loggedIn}
           />
           <MainContent
+            userCommunities={userCommunities}
             user={user}
             currentView={currentView}
             setView={setView}

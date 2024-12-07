@@ -2,10 +2,8 @@ import React, { useState } from "react";
 
 export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
-    // const handleTabChange = (tab) => setActiveTab(tab);
+    const handleTabChange = (tab) => setActiveTab(tab);
     const user = props.user;
-    console.log(user.communityIDs);
-    const communityIDs = user.communityIDs;
     return (
         <>
             {/* User DisplayName <br />
@@ -22,15 +20,27 @@ export default function Profile(props) {
             <p>Reputation: {user.reputation}</p>
 
             {/* Tabs for Listings */}
-            {/* <div>
+            <div>
                 <button onClick={() => handleTabChange("communities")}>Communities</button>
                 <button onClick={() => handleTabChange("posts")}>Posts</button>
                 <button onClick={() => handleTabChange("comments")}>Comments</button>
-            </div> */}
+            </div>
 
             {/* Listings */}
+            {activeTab === "communities" && (
+                <ol>
+                    {props.userCommunities.map((community) => (
+                        <li key={community._id}>
+                            <span><a href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    props.setView({ type: 'edit-community', id: community._id });
+                                }}>{community.name}</a></span>
+                        </li>
+                    ))}
+                </ol>
+            )}
 
-            
             {/* {activeTab === "communities" && (
                 <ul>
                     {communities.map((community) => (
