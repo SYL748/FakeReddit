@@ -11,6 +11,7 @@ const CommunitySchema = new Schema(
         startDate: {type: Date, default: Date.now},
         members: [{type: String, required: true}],
         memberCount: {type: Number, default: 1},
+        creator: {type: String, required: true}
     }
 );
 

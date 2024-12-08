@@ -170,7 +170,8 @@ app.post('/create-community', async (req, res) => {
     let communityObj = {
       name: req.body.name,
       description: req.body.description,
-      members: [req.body.members]
+      members: [req.body.members],
+      creator: req.body.creator
     }
 
     let newCommunityObj = new Community(communityObj);

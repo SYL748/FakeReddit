@@ -51,6 +51,7 @@ export default function CreateCommunity(props) {
                 name: formData.communityName,
                 description: formData.description,
                 members: props.user.displayName,
+                creator: props.user.displayName
             };
 
             let newCommunityID;
