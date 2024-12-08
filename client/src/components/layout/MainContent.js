@@ -84,6 +84,7 @@ function MainContent(props) {
   } else if (type === 'create-comment') {
     content = (
       <CommentForm
+        user={props.user}
         postID={postID}
         comments={props.comments}
         setComments={props.setComments}

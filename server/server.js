@@ -166,7 +166,7 @@ app.post('/create-post', async (req, res) => {
 
 app.post('/create-community', async (req, res) => {
   try {
-    
+
     let communityObj = {
       name: req.body.name,
       description: req.body.description,
@@ -219,9 +219,12 @@ app.post('/comments', async (req, res) => {
       post.commentIDs.push(newCommentObj._id);
       await post.save();
     }
-
     console.log("end of comments");
-
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { commentIDs: { $each: [newCommentObj._id] } } },
+      { new: true }
+    );
     res.status(200).json(newCommentObj);
   } catch (error) {
     res.status(500).json({ message: error.message });
