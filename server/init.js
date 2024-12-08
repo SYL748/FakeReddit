@@ -286,10 +286,30 @@ async function initializeDB() {
     let communityRef2 = await createCommunity(community2);
 
     await UserModel.findByIdAndUpdate(
+        //cj
         user1Ref._id, // Find the user by ID
-        { $push: { communityIDs: { $each: [communityRef2._id] } } }, // Push the new community IDs
+        {
+            $push:
+            {
+                communityIDs: { $each: [communityRef2._id, communityRef1._id] },
+                postIDs: { $each: [postRef1._id] },
+                commentIDs: { $each: [commentRef2._id, commentRef5._id, commentRef6._id, commentRef7._id] }
+            }
+        }, // Push the new community IDs
         { new: true } // Optionally return the updated document
-      );
+    );
+    await UserModel.findByIdAndUpdate(
+        //shao
+        user2Ref._id, // Find the user by ID
+        {
+            $push: {
+                communityIDs: { $each: [communityRef1._id] },
+                postIDs: { $each: [postRef2._id] },
+                commentIDs: { $each: [commentRef1._id, commentRef3._id, commentRef4._id] }
+            }
+        }, // Push the new community IDs
+        { new: true } // Optionally return the updated document
+    );
 
     if (db) {
         db.close();
