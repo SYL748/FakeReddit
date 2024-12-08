@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextAreaInput from "./TextArea";
 import TextInput from "./TextInput";
 import SelectInput from "./SelectorInput";
@@ -6,12 +6,15 @@ import Button from "../general/Button.js";
 import axios from 'axios';
 
 export default function CreatePostPage(props) {
+    console.log("CURRENT:" + props.userCommunities);
+    console.log("Other: " + props.otherCommunities);
+    const inOrderCommunities = [...props.userCommunities, ...props.otherCommunities];
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         communityName: '',
         title: '',
         content: '',
-        username: '',
+        // username: '',
         linkFlair: '',
         newFlair: ''
     });
@@ -20,7 +23,7 @@ export default function CreatePostPage(props) {
         communityName: '',
         title: '',
         content: '',
-        username: '',
+        // username: '',
         newFlair: ''
     });
     const [successMessage, setSuccessMessage] = useState('');
@@ -43,7 +46,7 @@ export default function CreatePostPage(props) {
         if (!formData.communityName) newErrors.communityName = 'Please select a community.';
         if (!formData.title) newErrors.title = 'Post title is required.';
         if (!formData.content) newErrors.content = 'Post content is required.';
-        if (!formData.username) newErrors.username = 'Username is required.';
+        // if (!formData.username) newErrors.username = 'Username is required.';
         if (formData.linkFlair && formData.newFlair) {
             newErrors.newFlair = 'Please enter only one flair: existing or new.';
         }
@@ -73,7 +76,7 @@ export default function CreatePostPage(props) {
                 title: formData.title,
                 content: formData.content,
                 linkFlairID: appliedFlair || null,
-                postedBy: formData.username,
+                postedBy: props.user.displayName,
                 postedDate: new Date(),
                 commentIDs: [],
                 views: 0,
@@ -122,7 +125,7 @@ export default function CreatePostPage(props) {
                     communityName: '',
                     title: '',
                     content: '',
-                    username: '',
+                    // username: '',
                     linkFlair: '',
                     newFlair: ''
                 });
@@ -144,7 +147,7 @@ export default function CreatePostPage(props) {
                 id="communityName"
                 value={formData.communityName}
                 onChange={handleInputChange}
-                options={props.communities.map((community) => ({
+                options={inOrderCommunities.map((community) => ({
                     value: community.name,
                     label: community.name
                 }))}
@@ -195,7 +198,7 @@ export default function CreatePostPage(props) {
             />
 
             {/* Username Input */}
-            <TextInput
+            {/* <TextInput
                 label="Your Username"
                 id="username"
                 value={formData.username}
@@ -203,7 +206,7 @@ export default function CreatePostPage(props) {
                 placeholder="Enter your username"
                 maxLength={100}
                 error={errors.username}
-            />
+            /> */}
             <Button
                 onClick={handleSubmit}
                 className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}

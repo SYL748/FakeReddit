@@ -46,6 +46,9 @@ function MainContent(props) {
   } else if (type === 'create-post') {
     content = (
       <CreatePostPage
+        userCommunities={props.userCommunities}
+        otherCommunities={props.otherCommunities}
+        user={props.user}
         setView={props.setView}
         setCount={props.setCount}
         posts={props.posts}
@@ -57,6 +60,7 @@ function MainContent(props) {
   } else if (type === 'create-community') {
     content = (
       <CreateCommunity
+        user={props.user}
         setView={props.setView}
         setCount={props.setCount}
         communities={props.communities}

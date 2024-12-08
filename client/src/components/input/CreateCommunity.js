@@ -9,12 +9,12 @@ export default function CreateCommunity(props) {
     const [formData, setFormData] = useState({
         communityName: '',
         description: '',
-        username: ''
+        // username: ''
     });
     const [errors, setErrors] = useState({
         communityName: '',
         description: '',
-        username: ''
+        // username: ''
     });
     const [successMessage, setSuccessMessage] = useState('');
     const handleInputChange = (e) => {
@@ -42,7 +42,7 @@ export default function CreateCommunity(props) {
             }
         }
         if (!formData.description) newErrors.description = 'Description is required.';
-        if (!formData.username) newErrors.username = 'Username is required.';
+        // if (!formData.username) newErrors.username = 'Username is required.';
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
@@ -50,18 +50,18 @@ export default function CreateCommunity(props) {
             const newCommunity = {
                 name: formData.communityName,
                 description: formData.description,
-                members: formData.username,
+                members: props.user.displayName,
             };
 
             let newCommunityID;
             const addCommunity = async (newCommunity) => {
                 try {
-                    console.log("adding community");
+                    // console.log("adding community");
                     axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/create-community', newCommunity);
-                    console.log("finish community");
+                    // console.log("finish community");
                     newCommunityID = res.data;
-                    console.log(res.data);
+                    // console.log(res.data);
                 } catch (error) {
                     console.log("error in post client" + error);
                 }
@@ -76,7 +76,7 @@ export default function CreateCommunity(props) {
                 setFormData({
                     communityName: '',
                     description: '',
-                    username: ''
+                    // username: ''
                 });
                 setSuccessMessage('');
                 props.setView({type: 'community', id: newCommunityID._id});
@@ -111,7 +111,7 @@ export default function CreateCommunity(props) {
             />
 
             {/* Username Input */}
-            <TextInput
+            {/* <TextInput
                 label="Your Username"
                 id="username"
                 value={formData.username}
@@ -119,7 +119,7 @@ export default function CreateCommunity(props) {
                 placeholder="Enter your username"
                 error={errors.username}
                 maxLength={100}
-            />
+            /> */}
 
             <Button
                 onClick={handleSubmit}

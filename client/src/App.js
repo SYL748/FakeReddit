@@ -40,6 +40,18 @@ function App() {
     }
   };
 
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/current-user', {
+        withCredentials: true,
+      });
+      console.log("Current user fetched successfully:", response.data);
+      setUser(response.data);
+    } catch (error) {
+      console.log("AAAAAAAA");
+    }
+  };
+
   // const fetchCommunities = async () => {
   //   try {
   //     axios.defaults.withCredentials = true;
@@ -125,6 +137,7 @@ function App() {
           await fetchPosts();
           await fetchComments();
           await fetchLinkFlairs();
+          if(loggedIn){await fetchUser();}
         }
       } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -185,6 +198,7 @@ function App() {
           />
           <NavBar
             user={user}
+            guest={guest}
             setView={setView}
             communities={communities}
             currentView={currentView}
@@ -196,6 +210,7 @@ function App() {
           />
           <MainContent
             userCommunities={userCommunities}
+            otherCommunities={otherCommunities}
             user={user}
             currentView={currentView}
             setView={setView}
