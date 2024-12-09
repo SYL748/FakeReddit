@@ -127,8 +127,9 @@ function App() {
       }
     };
     checkLoginStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,6 +145,7 @@ function App() {
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentView]);
 
   const handleLogin = () => {
@@ -209,6 +211,7 @@ function App() {
             isLoggedIn={loggedIn}
           />
           <MainContent
+            loggedIn={loggedIn}
             userCommunities={userCommunities}
             otherCommunities={otherCommunities}
             user={user}

@@ -17,7 +17,7 @@ function MainContent(props) {
   const { type, id } = props.currentView;
 
   useEffect(() => {
-    if ((type === 'community' || type == 'edit-community') && id) {
+    if ((type === 'community' || type === 'edit-community') && id) {
       setCommunityID(id);
       setPostID(null);
     } else if (type === 'post' && id) {
@@ -112,6 +112,8 @@ function MainContent(props) {
   } else if (type === 'community' && communityID) {
     content = (
       <CommunityPage
+        user={props.user}
+        loggedIn={props.loggedIn}
         communityID={communityID}
         posts={props.posts}
         setPosts={props.setPosts}
