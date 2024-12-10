@@ -3,8 +3,14 @@ import { formatTimestamp } from "../utils/FormatTimeUtil";
 import { getTotalCommentCount } from "../utils/GetTotalCommentCount";
 import { findCommunityByPostID } from "../utils/FindCommunityByPostID";
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 function PostInfoCard(props) {
+    console.log(props.post);
+    console.log(props.post.content);
+
+
+    const [upvoteCount, setUpvoteCount] = useState(null);
     const linkFlairContent = props.linkFlair.find(f => f._id === props.post.linkFlairID)?.content || '';
     const shortContent = props.post.content.length > 80 ? props.post.content.substring(0, 80) + "..." : props.post.content;
 
@@ -21,6 +27,19 @@ function PostInfoCard(props) {
             console.log("error in post client" + error);
         }
     }
+
+    const getUpvotes = async (info) => {
+        try {
+            const res = await axios.post('http://localhost:8000/upvotes', info);
+            setUpvoteCount(res.data.upvotes);
+        } catch (error) {
+            console.log("upvote count retrieval error " + error);
+        }
+    }
+
+    useEffect(() => {
+        getUpvotes(info);
+    }, []);
 
     let inCommunity = false;
     console.log(props.currentView);
@@ -50,6 +69,7 @@ function PostInfoCard(props) {
                 <div className="views-comments">
                     <p><span className="bold">Views: </span>{props.post.views}</p>
                     <p><span className="bold">Comments: </span>{getTotalCommentCount(props.comments, props.post.commentIDs)}</p>
+                    <p><span className="bold">Upvotes: </span>{upvoteCount}</p>
                 </div>
             </div>
         </div>

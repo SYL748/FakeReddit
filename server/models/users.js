@@ -15,6 +15,7 @@ const UserSchema = new Schema(
         communityIDs: [{type: Schema.Types.ObjectId, ref: 'Community'}],
         postIDs: [{type: Schema.Types.ObjectId, ref: 'Post'}],
         commentIDs: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+        creationDate: {type: Date, default: Date.now}
     }
 );
 

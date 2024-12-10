@@ -115,6 +115,36 @@ app.get('/posts', async (req, res) => {
   }
 });
 
+app.post('/find-posts', async (req, res) => {
+  try {
+    const allPosts = [];
+
+    for (const community of req.body.communities) {
+      const foundCommunity = await Community.findById(community._id);
+      console.log("Checking community: " + foundCommunity);
+
+      if (foundCommunity) {
+        for (const postId of foundCommunity.postIDs) {
+          const post = await Posts.findById(postId);
+          console.log("POST IS FOUND?");
+          if (post) {
+            console.log("PUSHING POST");
+            console.log(post);
+            allPosts.push(post);
+          }
+        }
+      }
+    }
+
+    console.log("SENDING THESE POSTS: ");
+    console.log(allPosts);
+
+    res.status(200).json(allPosts);
+  } catch (error) {
+      res.status(500).json({ message: 'server' });
+  }
+});
+
 app.post('/create-post', async (req, res) => {
   try {
     // console.log(req.body);
@@ -286,6 +316,16 @@ app.patch('/views', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+});
+
+app.post('/upvotes', async (req, res) => {
+  try {
+    const post = await Posts.findById(req.body.postID);
+    return res.status(200).json({upvotes: post.upvotes});
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  } 
 });
 
 app.post('/login', async (req, res) => {
