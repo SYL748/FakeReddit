@@ -44,7 +44,15 @@ function Homepage(props) {
         <div>
             <div className="home-heading">
                 <h2>All Posts</h2>
-                <ButtonList posts={props.posts} setPosts={props.setPosts} comments={props.comments}/>
+                <ButtonList 
+                posts={props.posts} 
+                setPosts={props.setPosts} 
+                comments={props.comments} 
+                userPosts={userPostList}
+                setUserPostList={setUserPostList}
+                otherPosts={otherPostList}
+                setOtherPostList={setOtherPostList}
+                loggedIn={props.loggedIn}/>
             </div>
             <PostCount currPostCount={props.currPostCount} />
             <Delimiter />
