@@ -33,7 +33,7 @@ function CommunityPage(props) {
 
     const handleJoin = async () => {
         try {
-            // await axios.post(`http://localhost:8000/communities/${props.communityID}/join`);
+            await axios.post(`http://localhost:8000/communities/${props.communityID}/join`);
             setIsMember(true);
         } catch (error) {
             console.error('Error joining community:', error);
@@ -42,7 +42,7 @@ function CommunityPage(props) {
 
     const handleLeave = async () => {
         try {
-            // await axios.post(`http://localhost:8000/communities/${props.communityID}/leave`);
+            await axios.post(`http://localhost:8000/communities/${props.communityID}/leave`);
             setIsMember(false);
         } catch (error) {
             console.error('Error leaving community:', error);
