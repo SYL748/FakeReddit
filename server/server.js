@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const UserModel = require('./models/users');
 const bcrypt = require('bcrypt');
 // app.use(cors());
 app.use(cors({
@@ -148,7 +149,11 @@ app.post('/create-post', async (req, res) => {
     let post = new Posts(postObject);
     //console.log(post);
     await post.save();
-
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { postIDs: { $each: [post._id] } } },
+      { new: true }
+    );
     communities.postIDs.push(post._id);
     await communities.save();
 
@@ -161,18 +166,21 @@ app.post('/create-post', async (req, res) => {
 
 app.post('/create-community', async (req, res) => {
   try {
-    console.log("inside" + typeof (req.body.members));
+
     let communityObj = {
       name: req.body.name,
       description: req.body.description,
-      members: [req.body.members]
+      members: [req.body.members],
+      creator: req.body.creator
     }
-
-    console.log(typeof (communityObj.members));
 
     let newCommunityObj = new Community(communityObj);
     await newCommunityObj.save();
-
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { communityIDs: { $each: [newCommunityObj._id] } } },
+      { new: true }
+    );
     res.status(200).json(newCommunityObj);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -212,9 +220,12 @@ app.post('/comments', async (req, res) => {
       post.commentIDs.push(newCommentObj._id);
       await post.save();
     }
-
     console.log("end of comments");
-
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { commentIDs: { $each: [newCommentObj._id] } } },
+      { new: true }
+    );
     res.status(200).json(newCommentObj);
   } catch (error) {
     res.status(500).json({ message: error.message });

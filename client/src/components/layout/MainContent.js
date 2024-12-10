@@ -7,6 +7,7 @@ import PostDisplay from '../pages/PostDisplay';
 import SearchPage from '../pages/SearchPage';
 import CommentForm from '../input/CommentForm';
 import Profile from '../input/Profile';
+import EditCommunity from '../input/editCommunity';
 import { useState, useEffect } from 'react';
 
 function MainContent(props) {
@@ -16,7 +17,7 @@ function MainContent(props) {
   const { type, id } = props.currentView;
 
   useEffect(() => {
-    if (type === 'community' && id) {
+    if ((type === 'community' || type === 'edit-community') && id) {
       setCommunityID(id);
       setPostID(null);
     } else if (type === 'post' && id) {
@@ -48,6 +49,9 @@ function MainContent(props) {
   } else if (type === 'create-post') {
     content = (
       <CreatePostPage
+        userCommunities={props.userCommunities}
+        otherCommunities={props.otherCommunities}
+        user={props.user}
         setView={props.setView}
         setCount={props.setCount}
         posts={props.posts}
@@ -59,15 +63,31 @@ function MainContent(props) {
   } else if (type === 'create-community') {
     content = (
       <CreateCommunity
+        user={props.user}
         setView={props.setView}
         setCount={props.setCount}
         communities={props.communities}
         setCommunities={props.setCommunities}
       />
     );
+  } else if (type === "edit-community" && communityID) {
+    content = (
+      <EditCommunity
+        communityID={communityID}
+        posts={props.posts}
+        setPosts={props.setPosts}
+        communities={props.communities}
+        comments={props.comments}
+        setView={props.setView}
+        linkFlair={props.linkFlair}
+        setCommunities={props.setCommunities}
+        currentView={props.currentView}
+      />
+    );
   } else if (type === 'create-comment') {
     content = (
       <CommentForm
+        user={props.user}
         postID={postID}
         comments={props.comments}
         setComments={props.setComments}
@@ -95,6 +115,8 @@ function MainContent(props) {
   } else if (type === 'community' && communityID) {
     content = (
       <CommunityPage
+        user={props.user}
+        loggedIn={props.loggedIn}
         communityID={communityID}
         posts={props.posts}
         setPosts={props.setPosts}
@@ -124,6 +146,9 @@ function MainContent(props) {
     content = (
       <Profile
         user={props.user}
+        communities={props.communities}
+        setView={props.setView}
+        userCommunities={props.userCommunities}
       />
     );
   } else {

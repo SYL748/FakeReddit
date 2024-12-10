@@ -75,6 +75,7 @@ function createCommunity(communityObj) {
         postIDs: communityObj.postIDs,
         startDate: communityObj.startDate,
         members: communityObj.members,
+        creator: communityObj.creator
     });
     return newCommunityDoc.save();
 }
@@ -277,6 +278,7 @@ async function initializeDB() {
         startDate: new Date('August 10, 2014 04:18:00'),
         members: [user1Ref.displayName, user2Ref.displayName],
         memberCount: 2,
+        creator: user2Ref.displayName
     };
     const community2 = { // community object 2
         communityID: 'community2',
@@ -286,15 +288,36 @@ async function initializeDB() {
         startDate: new Date('May 4, 2017 08:32:00'),
         members: [user1Ref.displayName],
         memberCount: 1,
+        creator: user1Ref.displayName
     };
     let communityRef1 = await createCommunity(community1);
     let communityRef2 = await createCommunity(community2);
 
     await UserModel.findByIdAndUpdate(
+        //cj
         user1Ref._id, // Find the user by ID
-        { $push: { communityIDs: { $each: [communityRef2._id] } } }, // Push the new community IDs
+        {
+            $push:
+            {
+                communityIDs: { $each: [communityRef2._id, communityRef1._id] },
+                postIDs: { $each: [postRef1._id] },
+                commentIDs: { $each: [commentRef2._id, commentRef5._id, commentRef6._id, commentRef7._id] }
+            }
+        }, // Push the new community IDs
         { new: true } // Optionally return the updated document
-      );
+    );
+    await UserModel.findByIdAndUpdate(
+        //shao
+        user2Ref._id, // Find the user by ID
+        {
+            $push: {
+                communityIDs: { $each: [communityRef1._id] },
+                postIDs: { $each: [postRef2._id] },
+                commentIDs: { $each: [commentRef1._id, commentRef3._id, commentRef4._id] }
+            }
+        }, // Push the new community IDs
+        { new: true } // Optionally return the updated document
+    );
 
     if (db) {
         db.close();

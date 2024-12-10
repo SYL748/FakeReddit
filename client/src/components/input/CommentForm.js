@@ -11,12 +11,12 @@ export default function CommentForm(props) {
 
     const [formData, setFormData] = useState({
         commentBody: '',
-        username: ''
+        // username: ''
     });
 
     const [errors, setErrors] = useState({
         commentBody: '',
-        username: ''
+        // username: ''
     });
 
     // State for success message
@@ -44,9 +44,9 @@ export default function CommentForm(props) {
         if (!formData.commentBody) {
             newErrors.commentBody = 'Comment body is required.';
         }
-        if (!formData.username) {
-            newErrors.username = 'Username is required.';
-        }
+        // if (!formData.username) {
+        //     newErrors.username = 'Username is required.';
+        // }
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -62,7 +62,7 @@ export default function CommentForm(props) {
 
             const newComment = {
                 content: formData.commentBody,
-                commentedBy: formData.username,
+                commentedBy: props.user.displayName,
                 isReply: props.isReply,
                 commentID: props.commentID,
                 postID: props.postID
@@ -95,7 +95,7 @@ export default function CommentForm(props) {
             setTimeout(() => {
                 setFormData({
                     commentBody: '',
-                    username: ''
+                    // username: ''
                 });
                 setSuccessMessage('');
                 props.setView({type: 'post', id: postID});
@@ -119,7 +119,7 @@ export default function CommentForm(props) {
                 maxLength={500}
             />
 
-            <TextInput
+            {/* <TextInput
                 label="Your Username"
                 id="username"
                 value={formData.username}
@@ -127,7 +127,7 @@ export default function CommentForm(props) {
                 placeholder="Enter your username"
                 error={errors.username}
                 maxLength={100}
-            />
+            /> */}
             <Button
                 onClick={handleSubmit}
                 className={`button ${isSubmitting ? 'disabled' : 'hover-orange'}`}
