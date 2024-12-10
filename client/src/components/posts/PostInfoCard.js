@@ -6,8 +6,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 function PostInfoCard(props) {
-    console.log(props.post);
-    console.log(props.post.content);
+    // console.log(props.post);
+    // console.log(props.post.content);
 
 
     const [upvoteCount, setUpvoteCount] = useState(null);
@@ -20,9 +20,9 @@ function PostInfoCard(props) {
 
     const updateViews = async (info) => {
         try {
-            console.log("updating views");
+            // console.log("updating views");
             const res = await axios.patch('http://localhost:8000/views', info);
-            console.log(res);
+            // console.log(res);
         } catch (error) {
             console.log("error in post client" + error);
         }
@@ -42,7 +42,7 @@ function PostInfoCard(props) {
     }, []);
 
     let inCommunity = false;
-    console.log(props.currentView);
+    // console.log(props.currentView);
     if (props.currentView.type === 'community') {
         inCommunity = true;
     }

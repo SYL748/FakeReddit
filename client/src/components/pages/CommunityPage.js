@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function CommunityPage(props) {
-    console.log("AAAAA" + props.loggedIn);
+    // console.log("AAAAA" + props.loggedIn);
     const [community, setCommunity] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isMember, setIsMember] = useState(false);

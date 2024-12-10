@@ -32,7 +32,7 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
             setIsSubmitting(true);
             axios.defaults.withCredentials = true;
             try {
-                console.log("post login in login.js");
+                // console.log("post login in login.js");
                 const res = await axios.post('http://localhost:8000/login',
                     {
                     email: formData.email,
@@ -40,12 +40,12 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
                     }
                 );
 
-                console.log("before second axios")
+                // console.log("before second axios")
 
                 try {
-                    console.log("calling current axios");
+                    // console.log("calling current axios");
                     const userRes = await axios.get('http://localhost:8000/current-user');
-                    console.log(userRes);
+                    // console.log(userRes);
                     setUser(userRes.data);
                 } catch (errorRes) {
                     setView({type:'login', id: null});
@@ -59,7 +59,7 @@ export default function WelcomePage({ onLogin, onSignup, onGuest, setView, setLo
                 }
         
             } catch (error) {
-                console.log(error);
+                // console.log(error);
                 const errors = error.response.data.errors;
                 if (errors.email) {
                     setErrors({email: "Email does not exist."});

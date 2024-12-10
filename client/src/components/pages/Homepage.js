@@ -14,7 +14,7 @@ function Homepage(props) {
 
     const findPosts = async (communities) => {
         try {
-            console.log("in post");
+            // console.log("in post");
             const res = await axios.post('http://localhost:8000/find-posts', {communities});
             return res.data;
         } catch (error) {
@@ -27,7 +27,7 @@ function Homepage(props) {
         const setPosts = async () => {
             const userPosts = await findPosts(props.userCommunities);
             setUserPostList(sortNewest(userPosts));
-            console.log(userPostList);
+            // console.log(userPostList);
             const otherPosts = await findPosts(props.otherCommunities);
             setOtherPostList(sortNewest(otherPosts));
         };
@@ -35,10 +35,10 @@ function Homepage(props) {
         setPosts();
     }, [props.userCommunities, props.otherCommunities]);
 
-    console.log("user: " + userPostList);
-    console.log("other: " + otherPostList);
-    console.log("all: " + props.posts);
-    console.log("LOGGED IN: " + props.loggedIn);
+    // console.log("user: " + userPostList);
+    // console.log("other: " + otherPostList);
+    // console.log("all: " + props.posts);
+    // console.log("LOGGED IN: " + props.loggedIn);
 
     return (
         <div>

@@ -5,9 +5,9 @@ import Button from "../general/Button.js";
 import axios from "axios";
 
 export default function CommentForm(props) {
-    console.log("in comment form");
+    // console.log("in comment form");
     const postID = props.postID;
-    console.log(postID);
+    // console.log(postID);
 
     const [formData, setFormData] = useState({
         commentBody: '',
@@ -67,14 +67,14 @@ export default function CommentForm(props) {
                 commentID: props.commentID,
                 postID: props.postID
             }
-            console.log("props:" + postID); 
+            // console.log("props:" + postID); 
 
             const addComment = async (newComment) => {
                 try {
-                    console.log("adding new comment");
+                    // console.log("adding new comment");
                     axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/comments', newComment);
-                    console.log(res);
+                    // console.log(res);
                 } catch (error) {
                     console.log("error in post client" + error);
                 }

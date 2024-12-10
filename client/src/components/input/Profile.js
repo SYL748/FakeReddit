@@ -40,7 +40,6 @@ export default function Profile(props) {
                     ))}
                 </ol>
             )}
-
             {/* {activeTab === "communities" && (
                 <ul>
                     {communities.map((community) => (

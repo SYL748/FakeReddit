@@ -6,8 +6,8 @@ import Button from "../general/Button.js";
 import axios from 'axios';
 
 export default function CreatePostPage(props) {
-    console.log("CURRENT:" + props.userCommunities);
-    console.log("Other: " + props.otherCommunities);
+    // console.log("CURRENT:" + props.userCommunities);
+    // console.log("Other: " + props.otherCommunities);
     const inOrderCommunities = [...props.userCommunities, ...props.otherCommunities];
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
@@ -83,14 +83,14 @@ export default function CreatePostPage(props) {
                 communityName: formData.communityName
             }
 
-            console.log(newPost);
+            // console.log(newPost);
 
             const addPost = async (newPost) => {
                 try {
-                    console.log("adding new post");
+                    // console.log("adding new post");
                     axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/create-post', newPost);
-                    console.log(res);
+                    // console.log(res);
                 } catch (error) {
                     console.log("error in post client" + error);
                 }
@@ -117,7 +117,7 @@ export default function CreatePostPage(props) {
             //     }
             // }
             //console.log(community.members);
-            console.log(formData.username);
+            // console.log(formData.username);
             props.setPosts(prevPosts => [...prevPosts, newPost]);
             setSuccessMessage('Post created successfully!');
             setTimeout(() => {

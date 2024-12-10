@@ -71,7 +71,7 @@ export default function SignupPage( {onSignupComplete} ) {
             setIsSubmitting(true);
 
             try {
-                console.log("post login in signup.js");
+                // console.log("post login in signup.js");
                 await axios.post('http://localhost:8000/signup',
                     {
                     firstName: formData.firstName,

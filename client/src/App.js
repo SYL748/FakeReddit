@@ -26,13 +26,15 @@ function App() {
   const [user, setUser] = useState(null);
   const [userCommunities, setUserCommunities] = useState([]);
   const [otherCommunities, setOtherCommunities] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
+  const [otherPosts, setOtherPosts] = useState([]);
 
   const fetchCurrentUser = async () => {
     try {
       const response = await axios.get('http://localhost:8000/current-user', {
         withCredentials: true,
       });
-      console.log("Current user fetched successfully:", response.data);
+      // console.log("Current user fetched successfully:", response.data);
       setUser(response.data);
       handleLogin();
     } catch (error) {
@@ -45,7 +47,7 @@ function App() {
       const response = await axios.get('http://localhost:8000/current-user', {
         withCredentials: true,
       });
-      console.log("Current user fetched successfully:", response.data);
+      // console.log("Current user fetched successfully:", response.data);
       setUser(response.data);
     } catch (error) {
       console.log("AAAAAAAA");
@@ -74,8 +76,7 @@ function App() {
         const userCreated = allCommunities.filter((community) =>
           user.communityIDs.includes(community._id)
         );
-        console.log("DSAFDSAFSADFAS:   " + userCreated);
-        userCreated.map(community => console.log(community.name));
+        // userCreated.map(community => console.log(community.name));
         const others = allCommunities.filter(
           (community) => !user.communityIDs.includes(community._id)
         );
@@ -87,16 +88,38 @@ function App() {
     }
   };
 
+  // const fetchPosts = async () => {
+  //   try {
+  //     axios.defaults.withCredentials = true;
+  //     const response = await axios.get('http://localhost:8000/posts');
+  //     setPosts(sortNewest(response.data));
+  //     setCount(response.data.length);
+  //   } catch (error) {
+  //     console.error("Error fetching posts:", error);
+  //   }
+  // };
+
   const fetchPosts = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios.get('http://localhost:8000/posts');
-      setPosts(sortNewest(response.data));
-      setCount(response.data.length);
+      const response = await axios.get('http://localhost:8000/posts', {
+        withCredentials: true,
+      });
+      setPosts(response.data);
+      if (user) {
+        const userPosts = posts.filter((post) => user.postIDs.includes(post._id));
+        console.log("Posts by userasdfasfsdafsadf: ", userPosts);
+        const otherPosts = posts.filter((post) => !user.postIDs.includes(post._id));
+        console.log("Posts by othersdsfsadfsdadsfsadf: ", otherPosts);
+  
+        setUserPosts(userPosts);
+        setOtherPosts(otherPosts);
+      }
+      setCount(posts.length); // Total post count
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   };
+  
 
   const fetchComments = async () => {
     try {

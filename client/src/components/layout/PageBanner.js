@@ -14,17 +14,17 @@ function PageBanner(props) {
 
     const handleLogout = async () => {
         try {
-            console.log("here in client");
+            // console.log("here in client");
             await axios.post('http://localhost:8000/logout');
             props.setLoggedIn(false);
-            console.log("set logged out" + props.isLoggedIn);
+            // console.log("set logged out" + props.isLoggedIn);
             props.setView({ type: 'login', id: null });
         } catch (error) {
             console.error("error in logout" + error);
         }
     };
     
-    console.log(props.isLoggedIn);
+    // console.log(props.isLoggedIn);
     return (
         <header className="banner">
             {props.isLoggedIn ? (
