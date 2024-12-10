@@ -43,7 +43,7 @@ function MainContent(props) {
         currentView={props.currentView}
         userCommunities={props.userCommunities}
         otherCommunities={props.otherCommunities}
-        isLoggedIn={props.isLoggedIn}
+        loggedIn={props.loggedIn}
       />
     );
   } else if (type === 'create-post') {
