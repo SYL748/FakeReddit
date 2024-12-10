@@ -40,6 +40,9 @@ function MainContent(props) {
         communities={props.communities}
         linkFlair={props.linkFlair}
         currentView={props.currentView}
+        userCommunities={props.userCommunities}
+        otherCommunities={props.otherCommunities}
+        isLoggedIn={props.isLoggedIn}
       />
     );
   } else if (type === 'create-post') {

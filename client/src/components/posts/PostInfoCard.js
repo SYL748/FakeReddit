@@ -6,6 +6,10 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 function PostInfoCard(props) {
+    console.log(props.post);
+    console.log(props.post.content);
+
+
     const [upvoteCount, setUpvoteCount] = useState(null);
     const linkFlairContent = props.linkFlair.find(f => f._id === props.post.linkFlairID)?.content || '';
     const shortContent = props.post.content.length > 80 ? props.post.content.substring(0, 80) + "..." : props.post.content;

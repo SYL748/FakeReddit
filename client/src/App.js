@@ -215,6 +215,9 @@ function App() {
             setIsReply={setIsReply}
             commentID={commentID}
             setCommentID={setCommentID}
+            userCommunities={userCommunities}
+            otherCommunities={otherCommunities}
+            isLoggedIn={loggedIn}
           />
         </>
       )}
