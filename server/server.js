@@ -198,6 +198,51 @@ app.get('/communities/:id', async (req, res) => {
   }
 });
 
+app.post('/communities/:id/join', async (req, res) => {
+  try{
+    let user = await User.findById(req.session.userId);
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $push: { communityIDs: req.params.id } }, // Remove communityId from communityIDs array
+      { new: true } // Return the updated user document
+    );
+    await Community.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { members: user.displayName}, // Remove the username from the members array
+        $inc: { memberCount: +1 } // Decrement the member count by 1
+      },
+      { new: true } // Return the updated document
+    );
+    res.status(200).json( {mesage: "working"});
+  } catch (error){
+    res.status(500).json({ message: error.message });
+  }
+})
+
+app.post('/communities/:id/leave', async (req, res) => {
+  try{
+    let user = await User.findById(req.session.userId);
+    await UserModel.findByIdAndUpdate(
+      req.session.userId,
+      { $pull: { communityIDs: req.params.id } }, // Remove communityId from communityIDs array
+      { new: true } // Return the updated user document
+    );
+    await Community.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { members: user.displayName}, // Remove the username from the members array
+        $inc: { memberCount: -1 } // Decrement the member count by 1
+      },
+      { new: true } // Return the updated document
+    );
+    res.status(200).json( {mesage: "working"});
+  } catch (error){
+    res.status(500).json({ message: error.message });
+  }
+})
+
+
 app.post('/comments', async (req, res) => {
   try {
     let commentObj = {
