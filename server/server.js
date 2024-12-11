@@ -16,10 +16,13 @@ app.use(cors({
 app.use(express.json());
 
 const mongoose = require('mongoose');
-let mongoDB = "mongodb://127.0.0.1:27017/phreddit";
-mongoose.connect(mongoDB)
-  .then(() => console.log('Connected to database'))
-  .catch(err => console.error('MongoDB connection error:', err));
+if (process.env.NODE_ENV !== "test") {
+  const mongoDB = "mongodb://127.0.0.1:27017/phreddit";
+  mongoose
+    .connect(mongoDB)
+    .then(() => console.log("Connected to database"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+}
 
 app.use(session({
   secret: "temp",
@@ -808,3 +811,5 @@ app.post('/check-admin', async (req, res) => {
 });
 
 app.listen(8000, () => { console.log("Server listening on port 8000..."); });
+
+module.exports = app;
