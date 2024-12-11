@@ -1,11 +1,53 @@
 import { formatTimestamp } from '../utils/FormatTimeUtil';
 import { findCommunityByPostID } from '../utils/FindCommunityByPostID.js';
 import { getTotalCommentCount } from '../utils/GetTotalCommentCount.js';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 function PostDetails(props) {
     const communityName = findCommunityByPostID(props.postID, props.communities);
     const post = props.posts.find(p => p._id === props.postID);
     const linkFlair = props.linkFlair.find(f => f._id === post.linkFlairID)?.content || '';
+
+    const [upvoteCount, setUpvoteCount] = useState(null);
+
+    const info = {
+        postID: post._id
+    }
+
+    const getUpvotes = async (info) => {
+        try {
+            const res = await axios.post('http://localhost:8000/upvotes', info);
+            setUpvoteCount(res.data.upvotes);
+        } catch (error) {
+            console.log("upvote count retrieval error " + error);
+        }
+    }
+
+    useEffect(() => {
+        getUpvotes(info);
+    }, [upvoteCount]);
+
+    const incrementUpvote = async () => {
+        try { 
+            await axios.patch('http://localhost:8000/increment-upvote', info);
+            setUpvoteCount(upvoteCount + 1);
+
+        } catch (error) {
+            console.log("increment upvote error" + error);
+        }
+    }
+
+    const decrementUpvote = async () => {
+        try { 
+            await axios.patch('http://localhost:8000/decrement-upvote', info);
+            setUpvoteCount(upvoteCount - 1);
+
+        } catch (error) {
+            console.log("decrement upvote error" + error);
+        }
+    }
+
     return (
         <div className="post-page">
             <div className="post-details">
@@ -24,12 +66,29 @@ function PostDetails(props) {
                     <div className="views-comments">
                         <p><span className="bold">Views: </span>{post.views}</p>
                         <p><span className="bold">Comments: </span>{getTotalCommentCount(props.comments, post.commentIDs)}</p>
+                        <p><span className="bold">Upvotes: </span>{upvoteCount}</p>
                     </div>
-                    <button onClick={() => {
-                        props.setView({type: 'create-comment', id: null});
-                        props.setIsReply(false);
-                        props.setCommentID('');
-                        }}>Comment</button>
+                    {props.loggedIn ? (
+                        <>
+                        <button onClick={() => {
+                            props.setView({type: 'create-comment', id: null});
+                            props.setIsReply(false);
+                            props.setCommentID('');
+                            }}>Comment</button>
+                        <button
+                            style={{ margin: "0 10px" }}
+                            onClick={incrementUpvote}>   
+                            Upvote
+                        </button>
+                        <button 
+                            onClick={decrementUpvote}>
+                            Downvote
+                        </button>
+                        </>
+                    ) : (
+                        null
+                    ) }
+                    
                 </div>
             </div>
         </div>

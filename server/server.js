@@ -63,7 +63,7 @@ const validateSession = async (req, res, next) => {
 app.get('/current-user', validateSession, (req, res) => {
   if (!req.user) {
     // Gracefully handle the not-logged-in case
-    return res.status(400).json({ loggedIn: false });
+    return res.status(400).json({ loggedIn: false});
   }
   const { _id, displayName, email, isAdmin, reputation, communityIDs, postIDs, commentIDs } = req.user;
   res.status(200).json({
@@ -363,6 +363,128 @@ app.post('/upvotes', async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   } 
+});
+
+app.post('/comment-upvotes', async (req, res) => {
+  try {
+    const comment = await Comments.findById(req.body.commentID);
+
+    return res.status(200).json({ upvotes: comment.upvotes });
+    
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.patch('/increment-upvote', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.session.userId);
+    const post = await Posts.findById(req.body.postID);
+
+    if (currentUser.reputation < 50) {
+      return res.status(400).json({ message: "not enough reputation (min 50)" });
+    }
+
+    await Posts.findByIdAndUpdate(
+      req.body.postID,
+      {$inc: {upvotes: 1}},
+      {new: true},
+    );
+
+    await User.findOneAndUpdate(
+      {displayName: post.postedBy},
+      {$inc: {reputation: 5}},
+      {new: true},
+    )
+    
+  res.status(200).json({ message: "incremented"});
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.patch('/decrement-upvote', async (req, res) => {
+  console.log(req.body.postID);
+  try {
+    const currentUser = await User.findById(req.session.userId);
+    const post = await Posts.findById(req.body.postID);
+
+    if (currentUser.reputation < 50) {
+      return res.status(400).json({ message: "not enough reputation (min 50)" });
+    }
+
+    await Posts.findByIdAndUpdate(
+      req.body.postID,
+      {$inc: {upvotes: -1}},
+      {new: true},
+    );
+
+    await User.findOneAndUpdate(
+      {displayName: post.postedBy},
+      {$inc: {reputation: -10}},
+      {new: true},
+    )
+    
+  res.status(200).json({ message: "incremented"});
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+app.patch('/increment-comment-upvote', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.session.userId);
+    const comment = await Comments.findById(req.body.commentID);
+
+    if (currentUser.reputation < 50) {
+      return res.status(400).json({ message: "not enough reputation (min 50)" });
+    }
+
+    await Comments.findByIdAndUpdate(
+      req.body.commentID,
+      {$inc: {upvotes: 1}},
+      {new: true}
+    );
+
+    await User.findOneAndUpdate(
+      {displayName: comment.commentedBy},
+      {$inc: {reputation: 5}},
+      {new: true}
+    )
+
+    res.status(200).json({ message: "Comment upvoted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.patch('/decrement-comment-upvote', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.session.userId);
+    const comment = await Comments.findById(req.body.commentID);
+
+    if (currentUser.reputation < 50) {
+      return res.status(400).json({ message: "not enough reputation (min 50)" });
+    }
+
+    await Comments.findByIdAndUpdate(
+      req.body.commentID,
+      {$inc: {upvotes: -1}},
+      {new: true}
+    );
+
+    await User.findOneAndUpdate(
+      {displayName: comment.commentedBy},
+      {$inc: {reputation: -10}},
+      {new: true}
+    )
+
+    res.status(200).json({ message: "Comment downvoted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.post('/login', async (req, res) => {
