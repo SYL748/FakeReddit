@@ -145,6 +145,43 @@ app.post('/find-posts', async (req, res) => {
   }
 });
 
+
+
+
+app.post('/find-posts-debug', async (req, res) => {
+  try {
+    console.log(req.body);
+    const allPosts = [];
+
+    for (const community of req.body.communities) {
+      const foundCommunity = await Community.findById(community._id);
+      console.log("Checking community DEBUG: " + foundCommunity);
+
+      if (foundCommunity) {
+        for (const postId of foundCommunity.postIDs) {
+          const post = await Posts.findById(postId);
+          if (post) {
+            console.log("PUSHING POST DEBUG");
+            console.log(post);
+            allPosts.push(post);
+          }
+        }
+      }
+    }
+
+    console.log("SENDING THESE POSTS DEBUG: ");
+    console.log(allPosts);
+
+    res.status(200).json(allPosts);
+  } catch (error) {
+      res.status(500).json({ message: 'server' });
+  }
+});
+
+
+
+
+
 app.post('/create-post', async (req, res) => {
   try {
     // console.log(req.body);

@@ -6,11 +6,11 @@ import { sortNewest } from '../utils/SortingUtil';
 function NavBar(props) {
     const isHomeView = props.currentView.type === 'home';
     const isCreateCommunityView = props.currentView.type === 'create-community';
-    // console.log(props.communities);
+    //console.log(props.communities);
 
     const combinedCommunities = [...props.userCommunities, ...props.otherCommunities];
 
-    // console.log("is logged" + props.isLoggedIn);
+    //console.log("is logged" + props.isLoggedIn);
 
     return (
         <div className="nav-bar">
