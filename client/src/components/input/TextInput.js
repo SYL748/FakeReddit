@@ -1,6 +1,6 @@
 import './input.css'
 
-export default function TextInput({ label, value, onChange, id, placeholder, error, maxLength = Infinity }) {
+export default function TextInput({ label, value, onChange, id, placeholder, error, maxLength = Infinity, disabled=false }) {
     return (
         <div className="input-group">
             <label htmlFor={id}>{label}:</label>
@@ -10,6 +10,7 @@ export default function TextInput({ label, value, onChange, id, placeholder, err
                 onChange={onChange}
                 placeholder={placeholder}
                 required
+                disabled={disabled}
                 {...(maxLength !== Infinity && { maxLength })}
             />
             {error && <p className="error-message">{error}</p>}

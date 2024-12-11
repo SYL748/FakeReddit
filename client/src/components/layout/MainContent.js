@@ -9,6 +9,7 @@ import CommentForm from '../input/CommentForm';
 import Profile from '../input/Profile';
 import EditCommunity from '../input/editCommunity';
 import { useState, useEffect } from 'react';
+import EditPosts from '../input/editPost';
 
 function MainContent(props) {
   const [postID, setPostID] = useState(null);
@@ -20,7 +21,7 @@ function MainContent(props) {
     if ((type === 'community' || type === 'edit-community') && id) {
       setCommunityID(id);
       setPostID(null);
-    } else if (type === 'post' && id) {
+    } else if ((type === 'post' || type == 'edit-post') && id) {
       setPostID(id);
       setCommunityID(null);
     }
@@ -60,6 +61,21 @@ function MainContent(props) {
         linkFlair={props.linkFlair}
       />
     );
+  } else if (type === 'edit-post' && postID) {
+    content = (
+      <EditPosts
+        communityID={communityID}
+        postID={postID}
+        posts={props.posts}
+        setPosts={props.setPosts}
+        communities={props.communities}
+        comments={props.comments}
+        setView={props.setView}
+        linkFlair={props.linkFlair}
+        setCommunities={props.setCommunities}
+        currentView={props.currentView}
+      />
+    )
   } else if (type === 'create-community') {
     content = (
       <CreateCommunity
@@ -149,6 +165,7 @@ function MainContent(props) {
         communities={props.communities}
         setView={props.setView}
         userCommunities={props.userCommunities}
+        userPosts={props.userPosts}
       />
     );
   } else {

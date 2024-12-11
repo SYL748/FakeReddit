@@ -28,6 +28,8 @@ function App() {
   const [otherCommunities, setOtherCommunities] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const [otherPosts, setOtherPosts] = useState([]);
+  const [userComments, setUserComments] = useState([]);
+  const [otherComments, setOtherComments] = useState([]);
 
   const fetchCurrentUser = async () => {
     try {
@@ -107,29 +109,43 @@ function App() {
       setPosts(response.data);
       if (user) {
         const userPosts = posts.filter((post) => user.postIDs.includes(post._id));
-        console.log("Posts by userasdfasfsdafsadf: ", userPosts);
         const otherPosts = posts.filter((post) => !user.postIDs.includes(post._id));
-        console.log("Posts by othersdsfsadfsdadsfsadf: ", otherPosts);
   
         setUserPosts(userPosts);
         setOtherPosts(otherPosts);
       }
-      setCount(posts.length); // Total post count
+      setCount(response.data.length); // Total post count
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   };
   
-
   const fetchComments = async () => {
     try {
-      axios.defaults.withCredentials = true;
-      const response = await axios.get('http://localhost:8000/comments');
+      const response = await axios.get('http://localhost:8000/comments', {
+        withCredentials: true,
+      });
       setComments(response.data);
+      if (user) {
+        const userComments = comments.filter((comment) => user.commentIDs.includes(comment._id));
+        const otherComments = comments.filter((comment) => !user.commentIDs.includes(comment._id));
+  
+        setUserComments(userComments);
+        setOtherComments(otherComments);
+      }
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
   };
+  // const fetchComments = async () => {
+  //   try {
+  //     axios.defaults.withCredentials = true;
+  //     const response = await axios.get('http://localhost:8000/comments');
+  //     setComments(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching comments:", error);
+  //   }
+  // };
 
   const fetchLinkFlairs = async () => {
     try {
@@ -235,6 +251,8 @@ function App() {
           />
           <MainContent
             loggedIn={loggedIn}
+            userPosts={userPosts}
+            otherPosts={otherPosts}
             userCommunities={userCommunities}
             otherCommunities={otherCommunities}
             user={user}

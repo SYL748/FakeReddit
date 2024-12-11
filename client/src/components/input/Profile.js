@@ -40,6 +40,39 @@ export default function Profile(props) {
                     ))}
                 </ol>
             )}
+            {activeTab === "posts" && (
+                <ol>
+                    {props.userPosts.map((post) => (
+                        <li key={post._id}>
+                            <span>
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        props.setView({ type: 'edit-post', id: post._id });
+                                    }}
+                                >
+                                    {post.title}
+                                </a>
+                            </span>
+                        </li>
+                    ))}
+                </ol>
+            )}
+
+            {/* {activeTab === "posts" && (
+                <ol>
+                    {props.userPosts.map((post) => (
+                        <li key={post._id}>
+                            <span><a href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    props.setView({ type: 'edit-post', id: post._id });
+                                }}>{community.name}</a></span>
+                        </li>
+                    ))}
+                </ol>
+            )} */}
             {/* {activeTab === "communities" && (
                 <ul>
                     {communities.map((community) => (

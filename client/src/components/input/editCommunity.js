@@ -104,6 +104,7 @@ export default function EditCommunity(props) {
         placeholder="Enter community name"
         error={errors.communityName}
         maxLength={100}
+        disabled={true}
       />
 
       {/* Community Description Input */}
