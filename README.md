@@ -41,7 +41,16 @@ In the server directory:
 In the client directory
 ```npm start```
 
+6. Open the browser
+Enter url:
+```http://localhost:3000```
+
 ## Team Member 1 Contribution
+Cody Jiang
+Both contributed to the project. Worked was pretty much split evenly
+as we also had to debug and understand the other person's code.
 
 ## Team Member 2 Contribution
-
+Shaoyang Li
+Both contributed to the project. Worked was pretty much split evenly
+as we also had to debug and understand the other person's code.
