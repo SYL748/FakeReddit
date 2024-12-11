@@ -93,6 +93,7 @@ function createUser(userObj) {
         communityIDs: userObj.communityIDs,
         postIDs: userObj.postIDs,
         commentIDs: userObj.commentIDs,
+        creationDate: userObj.creationDate,
     });
 
     return newUserDoc.save();

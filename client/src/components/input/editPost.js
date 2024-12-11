@@ -43,6 +43,9 @@ export default function EditPosts(props) {
         if (!formData.content) {
             newErrors.content = "Description is required.";
         }
+        if (!formData.title) {
+            newErrors.content = "Title is required.";
+        }
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -51,6 +54,7 @@ export default function EditPosts(props) {
             try {
                 const updatedPost = {
                     content: formData.content,
+                    title: formData.title,
                 };
 
                 await axios.patch(
@@ -70,6 +74,28 @@ export default function EditPosts(props) {
             }
         }
     };
+
+    const handleDelete = async () => {
+        try {
+          const confirmDelete = window.confirm(
+            "Are you sure you want to delete this post? This action cannot be undone."
+          );
+    
+          if (confirmDelete) {
+            console.log("DELETE BEFORE");
+            await axios.delete(
+              `http://localhost:8000/delete-post/${postData._id}`,
+              { withCredentials: true }
+            );
+            console.log("DELETE AFTER");
+    
+    
+            props.setView({ type: "profile", id: null });
+          }
+        } catch (error) {
+          console.error("Error deleting post:", error);
+        }
+      };
 
     return (
         <div className="edit-post-view">
@@ -92,7 +118,6 @@ export default function EditPosts(props) {
                 placeholder="Enter post title"
                 error={errors.title}
                 maxLength={100}
-                disabled={true}
             />
             <TextInput
                 label="Link Flair (optional)"
@@ -115,13 +140,13 @@ export default function EditPosts(props) {
                 <Button
                     onClick={handleSubmit}
                     className={`button ${isSubmitting ? "disabled" : "hover-orange"}`}
-                    buttonName="Update Community"
+                    buttonName="Update Post"
                     disabled={isSubmitting}
                 />
                 <Button
-                    //   onClick={handleDelete}
+                    onClick={handleDelete}
                     className={`button ${isSubmitting ? "disabled" : "hover-orange"}`}
-                    buttonName="Delete Community"
+                    buttonName="Delete Post"
                 />
             </div>
         </div>

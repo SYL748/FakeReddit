@@ -1,26 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
     const handleTabChange = (tab) => setActiveTab(tab);
     const user = props.user;
     console.log(props.userComments);
+
+    const [userCreationDate, setUserCreationDate] = useState('');
+    const getUserCreation = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/user-creation-date');
+            setUserCreationDate(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [communities, setCommunities] = useState([]);
+
+    const getCommunities = async () => {
+        try {
+            console.log("GETTING COMMUNITIES");
+            const res = await axios.get('http://localhost:8000/user-communities', {
+                withCredentials: true,
+              });
+            setCommunities(res.data.communities);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [posts, setPosts] = useState([]);
+
+    const getPosts = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/user-posts', {
+                withCredentials: true,
+              });
+            setPosts(res.data.posts);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getUserCreation();
+        getCommunities();
+        getPosts();
+    }, [activeTab]);
+
+    console.log(communities);
+
     return (
         <>
-            {/* User DisplayName <br />
-            User Email   <br />
-            Member since  <br />
-            Reputation <br />
-            Listing with buttons and links etc<br /> */}
-
-
-            {/* User Info */}
             <h2>{user.displayName}</h2>
             <p>Email: {user.email}</p>
-            {/* <p>Member since: {new Date(user.memberSince).toLocaleDateString()}</p> */}
+            <p>Member since: {userCreationDate}</p>
             <p>Reputation: {user.reputation}</p>
 
-            {/* Tabs for Listings */}
             <div>
                 <button onClick={() => handleTabChange("communities")}>Communities</button>
                 <button onClick={() => handleTabChange("posts")}>Posts</button>
@@ -29,21 +67,32 @@ export default function Profile(props) {
 
             {/* Listings */}
             {activeTab === "communities" && (
+            <>    
+            <h2>Communities</h2>
                 <ol>
-                    {props.userCommunities.map((community) => (
-                        <li key={community._id}>
-                            <span><a href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    props.setView({ type: 'edit-community', id: community._id });
-                                }}>{community.name}</a></span>
-                        </li>
+                    {communities.map((community) => (
+                    <li key={community._id}>
+                        <span>
+                        <a
+                            href="#"
+                            onClick={(e) => {
+                            e.preventDefault();
+                            props.setView({ type: 'edit-community', id: community._id });
+                            }}
+                        >
+                            {community.name}
+                        </a>
+                        </span>
+                    </li>
                     ))}
                 </ol>
+            </>
             )}
             {activeTab === "posts" && (
+            <>    
+            <h2>Posts</h2>
                 <ol>
-                    {props.userPosts.map((post) => (
+                    {posts.map((post) => (
                         <li key={post._id}>
                             <span>
                                 <a
@@ -59,9 +108,11 @@ export default function Profile(props) {
                         </li>
                     ))}
                 </ol>
+            </>
             )}
-
             {activeTab === "comments" && (
+            <>
+            <h2>Comments</h2>
                 <ul>
                     {props.userComments.map((c) => (
                         <li key={c._id}>
@@ -79,6 +130,7 @@ export default function Profile(props) {
                         </li>
                     ))}
                 </ul>
+            </>
             )}
 
         </>

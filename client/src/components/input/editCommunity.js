@@ -41,6 +41,10 @@ export default function EditCommunity(props) {
       newErrors.description = "Description is required.";
     }
 
+    if (!formData.communityName) {
+      newErrors.communityName = "Community name is required.";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
@@ -48,6 +52,7 @@ export default function EditCommunity(props) {
       try {
         const updatedCommunity = {
           description: formData.description,
+          communityName: formData.communityName,
         };
 
         await axios.patch(
@@ -68,24 +73,27 @@ export default function EditCommunity(props) {
     }
   };
 
-//   const handleDelete = async () => {
-//     try {
-//       const confirmDelete = window.confirm(
-//         "Are you sure you want to delete this community? This action cannot be undone."
-//       );
+  const handleDelete = async () => {
+    try {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this community? This action cannot be undone."
+      );
 
-//       if (confirmDelete) {
-//         await axios.delete(
-//           `http://localhost:8000/delete-community/${props.communityData._id}`,
-//           { withCredentials: true }
-//         );
+      if (confirmDelete) {
+        console.log("DELETE BEFORE");
+        await axios.delete(
+          `http://localhost:8000/delete-community/${communityData._id}`,
+          { withCredentials: true }
+        );
+        console.log("DELETE AFTER");
 
-//         props.setView({ type: "home", id: null }); // Redirect to home after deletion
-//       }
-//     } catch (error) {
-//       console.error("Error deleting community:", error);
-//     }
-//   };
+
+        props.setView({ type: "profile", id: null });
+      }
+    } catch (error) {
+      console.error("Error deleting community:", error);
+    }
+  };
 
   return (
     <div className="edit-community-view">
@@ -101,7 +109,6 @@ export default function EditCommunity(props) {
         placeholder="Enter community name"
         error={errors.communityName}
         maxLength={100}
-        disabled={true}
       />
 
       {/* Community Description Input */}
@@ -123,8 +130,8 @@ export default function EditCommunity(props) {
           disabled={isSubmitting}
         />
         <Button
-        //   onClick={handleDelete}
-          className="button hover-red"
+          onClick={handleDelete}
+          className="button hover-orange"
           buttonName="Delete Community"
         />
       </div>

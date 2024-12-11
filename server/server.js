@@ -83,6 +83,7 @@ app.get('/current-user', validateSession, (req, res) => {
 app.get('/communities', async (req, res) => {
   try {
     const communities = await Community.find();
+    //console.log("COMMUNITIES" + communities);
     res.status(200).json(communities);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -122,23 +123,23 @@ app.post('/find-posts', async (req, res) => {
 
     for (const community of req.body.communities) {
       const foundCommunity = await Community.findById(community._id);
-      console.log("Checking community: " + foundCommunity);
+      //console.log("Checking community: " + foundCommunity);
 
       if (foundCommunity) {
         for (const postId of foundCommunity.postIDs) {
           const post = await Posts.findById(postId);
-          console.log("POST IS FOUND?");
+          //console.log("POST IS FOUND?");
           if (post) {
-            console.log("PUSHING POST");
-            console.log(post);
+            //console.log("PUSHING POST");
+            //console.log(post);
             allPosts.push(post);
           }
         }
       }
     }
 
-    console.log("SENDING THESE POSTS: ");
-    console.log(allPosts);
+    //console.log("SENDING THESE POSTS: ");
+    //console.log(allPosts);
 
     res.status(200).json(allPosts);
   } catch (error) {
@@ -151,27 +152,27 @@ app.post('/find-posts', async (req, res) => {
 
 app.post('/find-posts-debug', async (req, res) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const allPosts = [];
 
     for (const community of req.body.communities) {
       const foundCommunity = await Community.findById(community._id);
-      console.log("Checking community DEBUG: " + foundCommunity);
+      //console.log("Checking community DEBUG: " + foundCommunity);
 
       if (foundCommunity) {
         for (const postId of foundCommunity.postIDs) {
           const post = await Posts.findById(postId);
           if (post) {
-            console.log("PUSHING POST DEBUG");
-            console.log(post);
+            //console.log("PUSHING POST DEBUG");
+            //console.log(post);
             allPosts.push(post);
           }
         }
       }
     }
 
-    console.log("SENDING THESE POSTS DEBUG: ");
-    console.log(allPosts);
+    //console.log("SENDING THESE POSTS DEBUG: ");
+    //console.log(allPosts);
 
     res.status(200).json(allPosts);
   } catch (error) {
@@ -195,12 +196,12 @@ app.post('/create-post', async (req, res) => {
         postedBy: req.body.postedBy,
       }
     } else {
-      console.log(req.body.linkFlairID);
+      //console.log(req.body.linkFlairID);
       let linkFlairObj = await LinkFlairs.findOne({ content: req.body.linkFlairID });
 
       if (!linkFlairObj) {
         linkFlairObj = new LinkFlairs({ content: req.body.linkFlairID });
-        console.log(linkFlairObj);
+        //console.log(linkFlairObj);
         await linkFlairObj.save();
       }
 
@@ -257,8 +258,9 @@ app.post('/create-community', async (req, res) => {
 app.patch('/edit-post/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
-    console.log("BEFORE");
+    const { content, title } = req.body;
+    //console.log("BEFORE");
+    console.log("EDITED TITEL" + title);
 
     // Validate the input
     if (!content) {
@@ -267,11 +269,11 @@ app.patch('/edit-post/:id', async (req, res) => {
     // Find and update the community
     const updatedPost = await Post.findByIdAndUpdate(
       id,
-      { content },
+      { content, title },
       { new: true } // Return the updated document
     )
-    console.log("dsafsdafas"+updatedPost);
-    console.log("AFTER");
+    //console.log("dsafsdafas"+updatedPost);
+    //console.log("AFTER");
     if (!updatedPost) {
       return res.status(404).json({ message: "Community not found." });
     }
@@ -312,7 +314,7 @@ app.patch('/edit-comment/:id', async (req, res) => {
 app.patch('/edit-community/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { description } = req.body;
+    const { description, communityName } = req.body;
 
     // Validate the input
     if (!description) {
@@ -322,7 +324,7 @@ app.patch('/edit-community/:id', async (req, res) => {
     // Find and update the community
     const updatedCommunity = await Community.findByIdAndUpdate(
       id,
-      { description },
+      { description, name: communityName },
       { new: true } // Return the updated document
     );
 
@@ -340,7 +342,7 @@ app.patch('/edit-community/:id', async (req, res) => {
 app.get('/communities/:id', async (req, res) => {
   try {
     const community = await Community.findById(req.params.id);
-    console.log("req id " + req.params.id);
+    //console.log("req id " + req.params.id);
     await community.save();
     res.status(200).json(community);
   } catch (error) {
@@ -415,7 +417,7 @@ app.post('/comments', async (req, res) => {
       post.commentIDs.push(newCommentObj._id);
       await post.save();
     }
-    console.log("end of comments");
+    //console.log("end of comments");
     await UserModel.findByIdAndUpdate(
       req.session.userId,
       { $push: { commentIDs: { $each: [newCommentObj._id] } } },
@@ -488,7 +490,7 @@ app.patch('/increment-upvote', async (req, res) => {
 });
 
 app.patch('/decrement-upvote', async (req, res) => {
-  console.log(req.body.postID);
+  //console.log(req.body.postID);
   try {
     const currentUser = await User.findById(req.session.userId);
     const post = await Posts.findById(req.body.postID);
@@ -571,7 +573,7 @@ app.patch('/decrement-comment-upvote', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  console.log("login session id: " + req.sessionID)
+  //console.log("login session id: " + req.sessionID)
 
   try {
     const email = await User.findOne({ email: req.body.email });
@@ -633,7 +635,7 @@ app.post('/signup', async (req, res) => {
 });
 
 app.post('/logout', async (req, res) => {
-  console.log("logging out: ", req.sessionID);
+  //console.log("logging out: ", req.sessionID);
 
   req.session.destroy((err) => {
     if (err) {
@@ -643,6 +645,107 @@ app.post('/logout', async (req, res) => {
     res.status(200).json({ message: "logout success" });
   });
 
+});
+
+app.get('/user-creation-date', async (req, res) => {
+  try {
+    console.log("creation:" + req.session.userId);
+    const user = await User.findById(req.session.userId);
+    console.log(user);
+    console.log(user.creationDate);
+    console.log(user.creationDate.toDateString());
+
+    res.send(user.creationDate.toDateString());
+  } catch (e) {
+    res.status(400).json({message: "error in creation date"});
+  }
+});
+
+app.get('/user-communities', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    const userCommunities = await Community.find({creator: user.displayName});
+
+
+    res.status(200).json({communities: userCommunities});
+  } catch (e) {
+    res.status(400).json({message: "error in creation date"});
+  }
+})
+
+app.delete('/delete-community/:id', async (req, res) => {
+  console.log("IN DELETE");
+  console.log("DELETING", req.params.id);
+
+  try {
+    const community = await Community.findById(req.params.id);
+
+    const posts = await Posts.find({ _id: { $in: community.postIDs } });
+
+    for (const post of posts) {
+      console.log("DELETING POST:", post._id);
+
+      for (const commentId of post.commentIDs) {
+        await deleteCommentAndReplies(commentId);
+      }
+
+      await Posts.findByIdAndDelete(post._id);
+    }
+
+    await Community.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({message: "deleted successfully"});
+  } catch (error) {
+    res.status(500).json({message: "delete error"});
+  }
+});
+
+const deleteCommentAndReplies = async (commentId) => {
+  try {
+    const comment = await Comments.findById(commentId);
+    if (!comment) return;
+
+    console.log("DELETING COMMENT:", comment._id);
+
+    for (const replies of comment.commentIDs) {
+      await deleteCommentAndReplies(replies);
+    }
+
+    //parent
+    await Comments.findByIdAndDelete(comment._id);
+  } catch (error) {
+    console.error("error deleting comments", error);
+  }
+};
+
+app.get('/user-posts', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    const userPosts = await Posts.find({postedBy: user.displayName});
+
+    res.status(200).json({posts: userPosts});
+  } catch (e) {
+    res.status(400).json({message: "error in creation date"});
+  }
+})
+
+app.delete('/delete-post/:id', async (req, res) => {
+  console.log("IN DELETE");
+  console.log("DELETING", req.params.id);
+
+  try {
+    const posts = await Posts.findById(req.params.id);
+
+    for (const commentId of posts.commentIDs) {
+      await deleteCommentAndReplies(commentId);
+    }
+
+    await Posts.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({message: "deleted successfully"});
+  } catch (error) {
+    res.status(500).json({message: "delete error"});
+  }
 });
 
 app.listen(8000, () => { console.log("Server listening on port 8000..."); });
