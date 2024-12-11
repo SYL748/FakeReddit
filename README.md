@@ -11,8 +11,35 @@ your application running.
 
 In the sections below, list and describe each contribution briefly.
 
+#Setup Instructions
+1. Clone the repository
+```
+git clone <repository url>
+cd <repository folder>
+```
 
-## remember had to install bcrypt and perhaps mongoose connect maybe
+2. Install dependencies
+```
+cd client
+npm install
+cd ../server
+npm install
+```
+
+3. Database setup
+Make sure MongoDB is running. This can be done with ```mongosh```
+Initialize the DB in the server directory:
+```
+node init.js mongodb://127.0.0.1:27017/phreddit <admin email> <admin username> <admin password>
+```
+
+4. Start the server
+In the server directory:
+```nodemon server.js```
+
+5. Start the frontend client
+In the client directory
+```npm start```
 
 ## Team Member 1 Contribution
 
