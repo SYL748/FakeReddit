@@ -110,6 +110,9 @@ function MainContent(props) {
         communities={props.communities}
         linkFlair={props.linkFlair}
         currentView={props.currentView}
+        userCommunities={props.userCommunities}
+        otherCommunities={props.otherCommunities}
+        loggedIn={props.loggedIn}
       />
     );
   } else if (type === 'community' && communityID) {

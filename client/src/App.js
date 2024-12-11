@@ -74,8 +74,8 @@ function App() {
         const userCreated = allCommunities.filter((community) =>
           user.communityIDs.includes(community._id)
         );
-        console.log("DSAFDSAFSADFAS:   " + userCreated);
-        userCreated.map(community => console.log(community.name));
+        //console.log("DSAFDSAFSADFAS:   " + userCreated);
+        //userCreated.map(community => console.log(community.name));
         const others = allCommunities.filter(
           (community) => !user.communityIDs.includes(community._id)
         );

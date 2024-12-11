@@ -2,7 +2,7 @@ import PostInfoCard from "./PostInfoCard";
 import DottedLine from "../general/DottedLine";
 
 function PostList(props) {
-    console.log(props.posts);
+    //console.log(props.posts);
     return (
         <div className="post-list">
             {props.posts.map((post, index) => (
