@@ -3,7 +3,8 @@ import Delimiter from "../general/Delimiter"
 import CommentDetail from "./CommentDetail"
 export default function PostDisplay(props) {
     const post = props.posts.find(p => p._id === props.postID);
-    // console.log(post);
+    console.log(post);
+    console.log(props.postID);
     return (
         <>
             <PostDetails
