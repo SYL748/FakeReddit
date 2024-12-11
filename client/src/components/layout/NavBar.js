@@ -2,15 +2,18 @@ import Button from '../general/Button';
 import Delimiter from '../general/Delimiter'
 import './navbar.css'
 import { sortNewest } from '../utils/SortingUtil';
+import { useState, useEffect } from 'react';
 
 function NavBar(props) {
     const isHomeView = props.currentView.type === 'home';
     const isCreateCommunityView = props.currentView.type === 'create-community';
     //console.log(props.communities);
 
-    const combinedCommunities = [...props.userCommunities, ...props.otherCommunities];
+    const [combinedCommunities, setCombinedCommunities] = useState([]);
 
-    //console.log("is logged" + props.isLoggedIn);
+    useEffect(() => {
+        setCombinedCommunities([...props.userCommunities, ...props.otherCommunities]);
+    }, [props.userCommunities, props.otherCommunities]);
 
     return (
         <div className="nav-bar">

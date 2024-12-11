@@ -30,6 +30,7 @@ function App() {
   const [otherPosts, setOtherPosts] = useState([]);
   const [userComments, setUserComments] = useState([]);
   const [otherComments, setOtherComments] = useState([]);
+  const [create, setCreate] = useState(false);
 
   const fetchCurrentUser = async () => {
     try {
@@ -172,7 +173,16 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (create) {
+          setCreate(false);
+          await fetchCommunities();
+          await fetchPosts();
+          await fetchComments();
+          await fetchLinkFlairs();
+          return;
+        }
         if (loggedIn || guest) {
+          console.log("RENREDINERINGDSFJGNS")
           await fetchCommunities();
           await fetchPosts();
           await fetchComments();
@@ -254,6 +264,8 @@ function App() {
             userPosts={userPosts}
             otherPosts={otherPosts}
             userCommunities={userCommunities}
+            setUserCommunities={setUserCommunities}
+            setCreate={setCreate}
             otherCommunities={otherCommunities}
             user={user}
             currentView={currentView}

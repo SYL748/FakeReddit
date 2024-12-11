@@ -83,6 +83,7 @@ export default function Profile(props) {
         
             setUsers((prevUsers) => prevUsers.filter((user) => user._id !== deleteUser));
             setActiveTab("users");
+            props.setView({type: 'profile', id: null});
         } catch (error) {
             console.log(error);
         }

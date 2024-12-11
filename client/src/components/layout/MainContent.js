@@ -90,6 +90,8 @@ function MainContent(props) {
         setCount={props.setCount}
         communities={props.communities}
         setCommunities={props.setCommunities}
+        setUserCommunities={props.setUserCommunities}
+        setCreate={props.setCreate}
       />
     );
   } else if (type === "edit-community" && communityID) {
