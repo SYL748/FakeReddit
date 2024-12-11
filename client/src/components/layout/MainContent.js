@@ -18,7 +18,11 @@ function MainContent(props) {
   const { type, id } = props.currentView;
 
   useEffect(() => {
-    if ((type === 'community' || type === 'edit-community') && id) {
+    if (type === 'home') {
+      setPostID(null);
+      setCommunityID(null);
+      props.setCommentID(null);
+    } else if ((type === 'community' || type === 'edit-community') && id) {
       setCommunityID(id);
       setPostID(null);
       props.setCommentID(null);
