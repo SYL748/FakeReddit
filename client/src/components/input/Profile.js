@@ -44,13 +44,25 @@ export default function Profile(props) {
         }
     }
 
+    const [comments, setComments] = useState([]);
+
+    const getComments = async () => {
+        try {
+            const res = await axios.get('http://localhost:8000/user-comments', {
+                withCredentials: true,
+              });
+            setComments(res.data.comments);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getUserCreation();
         getCommunities();
         getPosts();
+        getComments();
     }, [activeTab]);
-
-    console.log(communities);
 
     return (
         <>
@@ -114,7 +126,7 @@ export default function Profile(props) {
             <>
             <h2>Comments</h2>
                 <ul>
-                    {props.userComments.map((c) => (
+                    {comments.map((c) => (
                         <li key={c._id}>
                             <span>
                                 <a

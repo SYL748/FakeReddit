@@ -61,6 +61,27 @@ export default function EditComment(props) {
         }
     };
 
+    const handleDelete = async () => {
+        try {
+          const confirmDelete = window.confirm(
+            "Are you sure you want to delete this community? This action cannot be undone."
+          );
+    
+          if (confirmDelete) {
+            console.log("DELETE BEFORE");
+            await axios.delete(
+              `http://localhost:8000/delete-comment/${commentData._id}`,
+              { withCredentials: true }
+            );
+            console.log("DELETE AFTER");
+    
+    
+            props.setView({ type: "profile", id: null });
+          }
+        } catch (error) {
+          console.error("Error deleting comment:", error);
+        }
+      };
 
     return (
         <div className="edit-comment-view">
@@ -80,7 +101,7 @@ export default function EditComment(props) {
                 disabled={isSubmitting}
             />
             <Button
-                //   onClick={handleDelete}
+                onClick={handleDelete}
                 className="button hover-red"
                 buttonName="Delete Comment"
             />

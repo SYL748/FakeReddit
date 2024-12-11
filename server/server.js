@@ -729,6 +729,17 @@ app.get('/user-posts', async (req, res) => {
   }
 })
 
+app.get('/user-comments', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    const userComments = await Comments.find({commentedBy: user.displayName});
+
+    res.status(200).json({comments: userComments});
+  } catch (e) {
+    res.status(400).json({message: "error in creation date"});
+  }
+})
+
 app.delete('/delete-post/:id', async (req, res) => {
   console.log("IN DELETE");
   console.log("DELETING", req.params.id);
@@ -741,6 +752,19 @@ app.delete('/delete-post/:id', async (req, res) => {
     }
 
     await Posts.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({message: "deleted successfully"});
+  } catch (error) {
+    res.status(500).json({message: "delete error"});
+  }
+});
+
+app.delete('/delete-comment/:id', async (req, res) => {
+  console.log("IN DELETE");
+  console.log("DELETING", req.params.id);
+
+  try {
+    await deleteCommentAndReplies(req.params.id);
 
     res.status(200).json({message: "deleted successfully"});
   } catch (error) {
