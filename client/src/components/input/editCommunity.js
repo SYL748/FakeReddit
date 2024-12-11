@@ -8,6 +8,7 @@ export default function EditCommunity(props) {
     const communityData = props.communities.find(
         (community) => community._id === props.communityID
     );
+    console.log("SDFSFASDFDS"+communityData._id);
     const [formData, setFormData] = useState({
         communityName: communityData?.name || "",
         description: communityData?.description || "",
@@ -32,44 +33,40 @@ export default function EditCommunity(props) {
     });
   };
 
-//   const handleSubmit = async () => {
-//     if (isSubmitting) return;
+  const handleSubmit = async () => {
+    if (isSubmitting) return;
 
-//     let newErrors = {};
-//     if (!formData.communityName) {
-//       newErrors.communityName = "Community name is required.";
-//     }
-//     if (!formData.description) {
-//       newErrors.description = "Description is required.";
-//     }
+    let newErrors = {};
+    if (!formData.description) {
+      newErrors.description = "Description is required.";
+    }
 
-//     if (Object.keys(newErrors).length > 0) {
-//       setErrors(newErrors);
-//     } else {
-//       setIsSubmitting(true);
-//       try {
-//         const updatedCommunity = {
-//           name: formData.communityName,
-//           description: formData.description,
-//         };
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      setIsSubmitting(true);
+      try {
+        const updatedCommunity = {
+          description: formData.description,
+        };
 
-//         await axios.patch(
-//           `http://localhost:8000/edit-community/${props.communityData._id}`,
-//           updatedCommunity,
-//           { withCredentials: true }
-//         );
+        await axios.patch(
+          `http://localhost:8000/edit-community/${communityData._id}`,
+          updatedCommunity,
+          { withCredentials: true }
+        );
 
-//         setSuccessMessage("Community updated successfully!");
-//         setTimeout(() => {
-//           setSuccessMessage("");
-//           props.setView({ type: "community", id: props.communityData._id });
-//           setIsSubmitting(false);
-//         }, 1000);
-//       } catch (error) {
-//         console.error("Error updating community:", error);
-//       }
-//     }
-//   };
+        setSuccessMessage("Community updated successfully!");
+        setTimeout(() => {
+          setSuccessMessage("");
+          props.setView({ type: "profile", id: null });
+          setIsSubmitting(false);
+        }, 1000);
+      } catch (error) {
+        console.error("Error updating community:", error);
+      }
+    }
+  };
 
 //   const handleDelete = async () => {
 //     try {
@@ -120,7 +117,7 @@ export default function EditCommunity(props) {
 
       <div className="buttons-container">
         <Button
-        //   onClick={handleSubmit}
+          onClick={handleSubmit}
           className={`button ${isSubmitting ? "disabled" : "hover-orange"}`}
           buttonName="Update Community"
           disabled={isSubmitting}

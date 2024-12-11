@@ -3,6 +3,7 @@ import TextAreaInput from "./TextArea";
 import TextInput from "./TextInput";
 import Button from "../general/Button.js";
 import { findCommunityByPostID } from "../utils/FindCommunityByPostID.js";
+import axios from "axios";
 
 export default function EditPosts(props) {
 
@@ -20,8 +21,7 @@ export default function EditPosts(props) {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({
-        communityName: "",
-        description: "",
+        content: "",
     });
     const [successMessage, setSuccessMessage] = useState("");
     const handleInputChange = (e) => {
@@ -34,6 +34,41 @@ export default function EditPosts(props) {
             ...errors,
             [id]: "",
         });
+    };
+
+    const handleSubmit = async () => {
+        if (isSubmitting) return;
+
+        let newErrors = {};
+        if (!formData.content) {
+            newErrors.content = "Description is required.";
+        }
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            setIsSubmitting(true);
+            try {
+                const updatedPost = {
+                    content: formData.content,
+                };
+
+                await axios.patch(
+                    `http://localhost:8000/edit-post/${postData._id}`,
+                    updatedPost,
+                    { withCredentials: true }
+                );
+
+                setSuccessMessage("Community updated successfully!");
+                setTimeout(() => {
+                    setSuccessMessage("");
+                    props.setView({ type: "profile", id: null });
+                    setIsSubmitting(false);
+                }, 1000);
+            } catch (error) {
+                console.error("Error updating community:", error);
+            }
+        }
     };
 
     return (
@@ -78,7 +113,7 @@ export default function EditPosts(props) {
             />
             <div className="buttons-container">
                 <Button
-                    //   onClick={handleSubmit}
+                    onClick={handleSubmit}
                     className={`button ${isSubmitting ? "disabled" : "hover-orange"}`}
                     buttonName="Update Community"
                     disabled={isSubmitting}
