@@ -725,7 +725,7 @@ app.get('/user-posts', async (req, res) => {
 
     res.status(200).json({posts: userPosts});
   } catch (e) {
-    res.status(400).json({message: "error in creation date"});
+    res.status(400).json({message: "error in user posts"});
   }
 })
 
@@ -736,7 +736,17 @@ app.get('/user-comments', async (req, res) => {
 
     res.status(200).json({comments: userComments});
   } catch (e) {
-    res.status(400).json({message: "error in creation date"});
+    res.status(400).json({message: "error in user comments"});
+  }
+})
+
+app.post('/get-users', async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json({users: users});
+  } catch (error) {
+    res.status(400).json({message: "error in userdate"});
   }
 })
 
@@ -753,6 +763,12 @@ app.delete('/delete-post/:id', async (req, res) => {
 
     await Posts.findByIdAndDelete(req.params.id);
 
+    await Community.findOneAndUpdate(
+      {postIDs: req.params.id},
+      {$pull: {postIDs: req.params.id}},
+      {new: true}
+    );
+
     res.status(200).json({message: "deleted successfully"});
   } catch (error) {
     res.status(500).json({message: "delete error"});
@@ -764,11 +780,30 @@ app.delete('/delete-comment/:id', async (req, res) => {
   console.log("DELETING", req.params.id);
 
   try {
+    await Posts.findOneAndUpdate(
+      {commentIDs: req.params.id},
+      {$pull: {commentIDs: req.params.id}},
+      {new: true}
+    );
+
     await deleteCommentAndReplies(req.params.id);
 
     res.status(200).json({message: "deleted successfully"});
   } catch (error) {
     res.status(500).json({message: "delete error"});
+  }
+});
+
+app.post('/check-admin', async (req, res) => {
+  console.log("CHECKING ADMIN");
+  try {
+    const user = await User.findById(req.session.userId);
+
+    console.log("IS ADMIN? " + user.isAdmin);
+    res.status(200).json({isAdmin: user.isAdmin});
+
+  } catch (error) {
+    res.status(500).json({message: "check admin error"});
   }
 });
 
