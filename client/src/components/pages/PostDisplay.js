@@ -15,6 +15,7 @@ export default function PostDisplay(props) {
                 setIsReply={props.setIsReply}
                 setCommentID={props.setCommentID}
                 comments={props.comments}
+                loggedIn={props.loggedIn}
             />
             <Delimiter />
             {post.commentIDs && post.commentIDs.length > 0 ? (
@@ -25,6 +26,7 @@ export default function PostDisplay(props) {
                     setView={props.setView}
                     setIsReply={props.setIsReply}
                     setCommentID={props.setCommentID}
+                    loggedIn={props.loggedIn}
                 />
             ) : (
                 <p>No comments yet.</p>

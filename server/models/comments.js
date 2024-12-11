@@ -9,6 +9,7 @@ const CommentSchema = new Schema(
         commentIDs: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
         commentedBy: {type: String, required: true},
         commentedDate: {type: Date, default: Date.now},
+        upvotes: {type: Number, required: true, default: 0}
     }
 );
 

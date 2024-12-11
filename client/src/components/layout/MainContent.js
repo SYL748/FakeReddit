@@ -178,6 +178,7 @@ function MainContent(props) {
         comments={props.comments}
         setIsReply={props.setIsReply}
         setCommentID={props.setCommentID}
+        loggedIn={props.loggedIn}
       />
     );
   }
