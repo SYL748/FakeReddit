@@ -34,15 +34,19 @@ function CommunityPage(props) {
     const handleJoin = async () => {
         try {
             await axios.post(`http://localhost:8000/communities/${props.communityID}/join`);
+            const response = await axios.get(`http://localhost:8000/communities/${props.communityID}`);
+            setCommunity(response.data);
             setIsMember(true);
         } catch (error) {
             console.error('Error joining community:', error);
         }
     };
-
+    
     const handleLeave = async () => {
         try {
             await axios.post(`http://localhost:8000/communities/${props.communityID}/leave`);
+            const response = await axios.get(`http://localhost:8000/communities/${props.communityID}`);
+            setCommunity(response.data);
             setIsMember(false);
         } catch (error) {
             console.error('Error leaving community:', error);
