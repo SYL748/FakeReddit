@@ -35,6 +35,8 @@ function Homepage(props) {
         setPosts();
     }, [props.userCommunities, props.otherCommunities]);
 
+    console.log(otherPostList);
+
     //console.log("user: " + userPostList);
     //console.log("other: " + otherPostList);
     //console.log("all: " + props.posts);

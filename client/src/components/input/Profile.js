@@ -4,135 +4,144 @@ import axios from "axios";
 export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
     const handleTabChange = (tab) => setActiveTab(tab);
-    const user = props.user;
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [userID, setUserID] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const [userCreationDate, setUserCreationDate] = useState('');
-    const getUserCreation = async () => {
-        try {
-            const res = await axios.get('http://localhost:8000/user-creation-date');
-            setUserCreationDate(res.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const [communities, setCommunities] = useState([]);
-
-    const getCommunities = async () => {
-        try {
-            console.log("GETTING COMMUNITIES");
-            const res = await axios.get('http://localhost:8000/user-communities', {
-                withCredentials: true,
-              });
-            setCommunities(res.data.communities);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const [posts, setPosts] = useState([]);
-
-    const getPosts = async () => {
-        try {
-            const res = await axios.get('http://localhost:8000/user-posts', {
-                withCredentials: true,
-              });
-            setPosts(res.data.posts);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const [comments, setComments] = useState([]);
-
-    const getComments = async () => {
-        try {
-            const res = await axios.get('http://localhost:8000/user-comments', {
-                withCredentials: true,
-              });
-            setComments(res.data.comments);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     const [isAdmin, setAdmin] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [adminID, setAdminID] = useState(null);
 
-    const checkAdmin = async () => {
+    const onMount = async () => {
         try {
-            console.log("BEFORE ADMIN CHECK");
-            const res = await axios.post('http://localhost:8000/check-admin');
-            console.log("AFTER ADMIN CHECK");
-            setAdmin(res.data.isAdmin);
+            //console.log("get current user before");
+            const currentUserRes = await axios.get('http://localhost:8000/current-user');
+            //console.log("get current user after");
+            setSelectedUser(currentUserRes.data);
+            //console.log(currentUserRes);
+            //console.log(currentUserRes.data.id);
+            setUserID(currentUserRes.data.id);
+            setAdminID(currentUserRes.data.id);
+            setLoading(false);
+            const adminRes = await axios.post('http://localhost:8000/check-admin');
+            setAdmin(adminRes.data.isAdmin);
         } catch (error) {
             console.log(error);
         }
     }
 
-    const [users, setUsers] = useState([]);
-    
-    const getUsers = async () => {
+    const getCurrentUser = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/get-users');
-            setUsers(res.data.users);
+            const currentUserRes = await axios.get('http://localhost:8000/current-user');
+            setSelectedUser(currentUserRes.data);
+            setUserID(currentUserRes.data.id);
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        checkAdmin();
+        onMount();
     }, []);
 
+    const fetchData = async () => {
+        try {
+            if (!selectedUser || !userID) return;
+            const userCreationRes = await axios.get(`http://localhost:8000/user-creation-date/${userID}`);
+            setUserCreationDate(userCreationRes.data);
+            const getCommunitiesRes = await axios.get(`http://localhost:8000/user-communities/${userID}`, {withCredentials: true});
+            setCommunities(getCommunitiesRes.data.communities);
+            const getPostsRes = await axios.get(`http://localhost:8000/user-posts/${userID}`, {withCredentials: true});
+            setPosts(getPostsRes.data.posts);
+            const getCommentsRes = await axios.get(`http://localhost:8000/user-comments/${userID}`, {withCredentials: true});
+            setComments(getCommentsRes.data.comments);
+            const getUsersRes = await axios.post('http://localhost:8000/get-users');
+            setUsers(getUsersRes.data.users);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
-        getUserCreation();
-        getCommunities();
-        getPosts();
-        getComments();
-        getUsers();
-    }, [activeTab]);
+        fetchData();
+    }, [activeTab, selectedUser]);
+
+    const deleteUser = async (deleteUser) => {
+        try {
+            const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+            if (!confirmDelete) return;
+        
+            //console.log("BEFORE DELETE");
+            await axios.delete(`http://localhost:8000/delete-user/${deleteUser}`);
+            //console.log("AFTER DELETE");
+        
+            setUsers((prevUsers) => prevUsers.filter((user) => user._id !== deleteUser));
+            setActiveTab("users");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if (loading) {
+        return <p>bruh.</p>;
+    }
 
     return (
         <>
-            <h2>{user.displayName}</h2>
-            <p>Email: {user.email}</p>
+            <h2>{selectedUser.displayName}</h2>
+            <p>Email: {selectedUser.email}</p>
             <p>Member since: {userCreationDate}</p>
-            <p>Reputation: {user.reputation}</p>
+            <p>Reputation: {selectedUser.reputation}</p>
 
             <div>
-                {isAdmin ? (
+                {isAdmin && selectedUser.id === adminID && (
                     <button onClick={() => handleTabChange('users')}>Users</button>
-                ) : null}
+                )}
                 <button onClick={() => handleTabChange("communities")}>Communities</button>
                 <button onClick={() => handleTabChange("posts")}>Posts</button>
                 <button onClick={() => handleTabChange("comments")}>Comments</button>
+
+                {isAdmin && selectedUser.id !== adminID && (
+                    <button onClick={() => getCurrentUser()}>Back to Admin Profile</button>
+                )}
             </div>
 
             {/* Listings */}
 
             {activeTab === "users" && isAdmin && (
-            <>    
-            <h2>Users</h2>
-                <ol>
-                    {users.map((user) => (
-                    <li key={user._id}>
-                        <span>
-                        <a
-                            href="#"
-                            onClick={(e) => {
-                            e.preventDefault();
-                            //temp view
-                            props.setView({ type: 'edit-community', id: user._id });
-                            }}
-                        >
-                            {user.displayName}
-                        </a>
-                        </span>
-                    </li>
-                    ))}
-                </ol>
-            </>
-            )} 
+                <>
+                    <h2>Users</h2>
+                    <ol>
+                        {users.map((user) => (
+                            <li key={user._id}>
+                                <span>
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setSelectedUser(user);
+                                            setUserID(user._id);
+                                            setActiveTab("posts");
+                                            props.setView({ type: "profile", id: null });
+                                        }}
+                                    >
+                                        {user.displayName}
+                                    </a>
+                                </span>
+                                <p>Email: {user.email}</p>
+                                <p>Reputation: {user.reputation}</p>
+                                <button onClick={() => deleteUser(user._id)}>Delete User</button>
+                            </li>
+                        ))}
+                    </ol>
+                </>
+            )}
             {activeTab === "communities" && (
             <>    
             <h2>Communities</h2>

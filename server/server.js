@@ -123,15 +123,17 @@ app.post('/find-posts', async (req, res) => {
 
     for (const community of req.body.communities) {
       const foundCommunity = await Community.findById(community._id);
-      //console.log("Checking community: " + foundCommunity);
+      console.log("Checking community: " + foundCommunity);
 
       if (foundCommunity) {
         for (const postId of foundCommunity.postIDs) {
+          console.log(postId);
           const post = await Posts.findById(postId);
-          //console.log("POST IS FOUND?");
+          console.log("POST IS FOUND?");
+          console.log(post);
           if (post) {
-            //console.log("PUSHING POST");
-            //console.log(post);
+            console.log("PUSHING POST");
+            console.log(post);
             allPosts.push(post);
           }
         }
@@ -139,7 +141,7 @@ app.post('/find-posts', async (req, res) => {
     }
 
     //console.log("SENDING THESE POSTS: ");
-    //console.log(allPosts);
+    console.log(allPosts);
 
     res.status(200).json(allPosts);
   } catch (error) {
@@ -647,10 +649,11 @@ app.post('/logout', async (req, res) => {
 
 });
 
-app.get('/user-creation-date', async (req, res) => {
+app.get('/user-creation-date/:id', async (req, res) => {
   try {
-    console.log("creation:" + req.session.userId);
-    const user = await User.findById(req.session.userId);
+    console.log("REQ PARAMS" + req.params.id);
+    const user = await User.findById(req.params.id);
+
     console.log(user);
     console.log(user.creationDate);
     console.log(user.creationDate.toDateString());
@@ -661,11 +664,14 @@ app.get('/user-creation-date', async (req, res) => {
   }
 });
 
-app.get('/user-communities', async (req, res) => {
+app.get('/user-communities/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.session.userId);
+    console.log("REQ PARAMS" + req.params.id);
+    const user = await User.findById(req.params.id);
+    //const user = await User.findById(req.session.userId);
+    console.log("User: " + user);
     const userCommunities = await Community.find({creator: user.displayName});
-
+    console.log("User Communities: "+ userCommunities);
 
     res.status(200).json({communities: userCommunities});
   } catch (e) {
@@ -718,9 +724,11 @@ const deleteCommentAndReplies = async (commentId) => {
   }
 };
 
-app.get('/user-posts', async (req, res) => {
+app.get('/user-posts/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.session.userId);
+    console.log("REQ PARAMS" + req.params.id);
+    const user = await User.findById(req.params.id);
+    //const user = await User.findById(req.session.userId);
     const userPosts = await Posts.find({postedBy: user.displayName});
 
     res.status(200).json({posts: userPosts});
@@ -729,9 +737,11 @@ app.get('/user-posts', async (req, res) => {
   }
 })
 
-app.get('/user-comments', async (req, res) => {
+app.get('/user-comments/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.session.userId);
+    console.log("REQ PARAMS" + req.params.id);
+    const user = await User.findById(req.params.id);
+    //const user = await User.findById(req.session.userId);
     const userComments = await Comments.find({commentedBy: user.displayName});
 
     res.status(200).json({comments: userComments});
@@ -804,6 +814,67 @@ app.post('/check-admin', async (req, res) => {
 
   } catch (error) {
     res.status(500).json({message: "check admin error"});
+  }
+});
+
+app.delete('/delete-user/:id', async (req, res) => {
+  try {
+    console.log("DELETE REQ" + req.params.id);
+    const user = await User.findById(req.params.id);
+
+    for (const postID of user.postIDs) {
+      const post = await Posts.findById(postID);
+
+      console.log("DELETING POST" + post);
+
+      if (post) {
+        await Community.findOneAndUpdate(
+          {postIDs: postID},
+          {$pull: {postIDs: postID}},
+          {new: true}
+        );
+
+        for (const commentID of post.commentIDs) {
+          await deleteCommentAndReplies(commentID);
+        }
+        await Posts.findByIdAndDelete(postID);
+      }
+    }
+
+    for (const communityID of user.communityIDs) {
+      const community = await Community.findById(communityID);
+      if (community) {
+        community.members = community.members.filter(member => member !== user.displayName);
+        community.memberCount = community.members.length;
+
+        if (community.creator === user.displayName) {
+
+          const communityPosts = await Posts.find({ _id: { $in: community.postIDs } });
+
+          for (const communityPost of communityPosts) {          
+            for (const commentId of communityPost.commentIDs) {
+              await deleteCommentAndReplies(commentId);
+            }
+            await Posts.findByIdAndDelete(communityPost._id);
+          }
+
+          await Community.findByIdAndDelete(communityID);
+
+        } else {
+          await community.save();
+        }
+      }
+    }
+
+    for (const commentID of user.commentIDs) {
+      await deleteCommentAndReplies(commentID); 
+    }
+
+    await User.findByIdAndDelete(req.params.id);
+    
+    res.status(200).json({message: "delete user success"});
+  } catch (error) {
+    res.status(500).json({message: "delete user error"});
   }
 });
 
