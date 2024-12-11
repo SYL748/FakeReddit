@@ -11,7 +11,7 @@ your application running.
 
 In the sections below, list and describe each contribution briefly.
 
-#Setup Instructions
+# Setup Instructions
 1. Clone the repository
 ```
 git clone <repository url>
