@@ -63,6 +63,9 @@ export default function CreateCommunity(props) {
                     // console.log("finish community");
                     newCommunityID = res.data;
                     // console.log(res.data);
+                    props.setCreate(true);
+                    props.setUserCommunities((prev) => [...prev, newCommunityID]);
+
                 } catch (error) {
                     console.log("error in post client" + error);
                 }
