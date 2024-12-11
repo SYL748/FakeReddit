@@ -46,11 +46,11 @@ Enter url:
 ```http://localhost:3000```
 
 ## Team Member 1 Contribution
-Cody Jiang
+Cody Jiang </br>
 Both contributed to the project. Worked was pretty much split evenly
 as we also had to debug and understand the other person's code.
 
 ## Team Member 2 Contribution
-Shaoyang Li
+Shaoyang Li</br>
 Both contributed to the project. Worked was pretty much split evenly
 as we also had to debug and understand the other person's code.
