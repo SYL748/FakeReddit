@@ -10,24 +10,30 @@ import Profile from '../input/Profile';
 import EditCommunity from '../input/editCommunity';
 import { useState, useEffect } from 'react';
 import EditPosts from '../input/editPost';
+import EditComment from '../input/editComment';
 
 function MainContent(props) {
   const [postID, setPostID] = useState(null);
   const [communityID, setCommunityID] = useState(null);
-
   const { type, id } = props.currentView;
 
   useEffect(() => {
     if ((type === 'community' || type === 'edit-community') && id) {
       setCommunityID(id);
       setPostID(null);
-    } else if ((type === 'post' || type == 'edit-post') && id) {
+      props.setCommentID(null);
+    } else if ((type === 'post' || type === 'edit-post') && id) {
       setPostID(id);
       setCommunityID(null);
+      props.setCommentID(null);
+    } else if (type === 'edit-comment' && id) {
+      props.setCommentID(id);
+      setCommunityID(null);
+      setPostID(null);
     }
   }, [type, id]);
 
-  console.log("current view: ", type, "Post ID:", postID, "Community ID:", communityID);
+  console.log("current view: ", type, "Post ID:", postID, "Community ID:", communityID, "Comment ID:", props.commentID);
 
   let content;
 
@@ -100,6 +106,20 @@ function MainContent(props) {
         currentView={props.currentView}
       />
     );
+  } else if (type === "edit-comment" && props.commentID) {
+    content = (
+      <EditComment
+        communityID={props.communityID}
+        posts={props.posts}
+        setPosts={props.setPosts}
+        communities={props.communities}
+        comments={props.comments}
+        setView={props.setView}
+        linkFlair={props.linkFlair}
+        setCommunities={props.setCommunities}
+        currentView={props.currentView}
+        commentID={props.commentID}
+      />)
   } else if (type === 'create-comment') {
     content = (
       <CommentForm
@@ -169,6 +189,7 @@ function MainContent(props) {
         setView={props.setView}
         userCommunities={props.userCommunities}
         userPosts={props.userPosts}
+        userComments={props.userComments}
       />
     );
   } else {

@@ -275,6 +275,8 @@ function App() {
             setIsReply={setIsReply}
             commentID={commentID}
             setCommentID={setCommentID}
+            userComments={userComments}
+            otherComments={otherComments}
           />
         </>
       )}

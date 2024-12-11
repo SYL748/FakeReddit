@@ -4,6 +4,7 @@ export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
     const handleTabChange = (tab) => setActiveTab(tab);
     const user = props.user;
+    console.log(props.userComments);
     return (
         <>
             {/* User DisplayName <br />
@@ -60,54 +61,26 @@ export default function Profile(props) {
                 </ol>
             )}
 
-            {/* {activeTab === "posts" && (
-                <ol>
-                    {props.userPosts.map((post) => (
-                        <li key={post._id}>
-                            <span><a href="#"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    props.setView({ type: 'edit-post', id: post._id });
-                                }}>{community.name}</a></span>
-                        </li>
-                    ))}
-                </ol>
-            )} */}
-            {/* {activeTab === "communities" && (
-                <ul>
-                    {communities.map((community) => (
-                        <li key={community.id}>
-                            <span>{community.name}</span>
-                            <button onClick={() => onEdit("community", community.id)}>Edit</button>
-                            <button onClick={() => onDelete("community", community.id)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-
-            {activeTab === "posts" && (
-                <ul>
-                    {posts.map((post) => (
-                        <li key={post.id}>
-                            <span>{post.title}</span>
-                            <button onClick={() => onEdit("post", post.id)}>Edit</button>
-                            <button onClick={() => onDelete("post", post.id)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-            )}
-
             {activeTab === "comments" && (
                 <ul>
-                    {comments.map((comment) => (
-                        <li key={comment.id}>
-                            <span>{comment.content.slice(0, 20)}...</span>
-                            <button onClick={() => onEdit("comment", comment.id)}>Edit</button>
-                            <button onClick={() => onDelete("comment", comment.id)}>Delete</button>
+                    {props.userComments.map((c) => (
+                        <li key={c._id}>
+                            <span>
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        props.setView({ type: "edit-comment", id: c._id });
+                                    }}
+                                >
+                                    {c.content.slice(0,20)}...
+                                </a>
+                            </span>
                         </li>
                     ))}
                 </ul>
-            )} */}
+            )}
+
         </>
     );
 }

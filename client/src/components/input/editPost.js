@@ -37,7 +37,9 @@ export default function EditPosts(props) {
     };
 
     return (
-        <>
+        <div className="edit-post-view">
+            <h2>Edit Post</h2>
+            {successMessage && <p className="success-message">{successMessage}</p>}
             <TextInput
                 label="Select Community"
                 id="communityName"
@@ -87,6 +89,6 @@ export default function EditPosts(props) {
                     buttonName="Delete Community"
                 />
             </div>
-        </>
+        </div>
     )
 }
