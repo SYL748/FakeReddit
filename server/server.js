@@ -40,6 +40,7 @@ const Comments = require('./models/comments.js');
 const LinkFlairs = require('./models/linkflairs.js');
 const Posts = require('./models/posts.js');
 const User = require('./models/users.js');
+const Post = require('./models/posts.js');
 
 
 const validateSession = async (req, res, next) => {
@@ -251,6 +252,88 @@ app.post('/create-community', async (req, res) => {
     res.status(200).json(newCommunityObj);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+app.patch('/edit-post/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+    console.log("BEFORE");
+
+    // Validate the input
+    if (!content) {
+      return res.status(400).json({ message: "Description is required." });
+    }
+    // Find and update the community
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { content },
+      { new: true } // Return the updated document
+    )
+    console.log("dsafsdafas"+updatedPost);
+    console.log("AFTER");
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Community not found." });
+    }
+
+    res.status(200).json({ message: "Post updated successfully!", updatedPost });
+  } catch (error) {
+    console.error("Error updating community:", error);
+    res.status(500).json({ message: "Server error while updating community." });
+  }
+});
+app.patch('/edit-comment/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    // Validate the input
+    if (!content) {
+      return res.status(400).json({ message: "Description is required." });
+    }
+
+    // Find and update the community
+    const updatedComment = await Comments.findByIdAndUpdate(
+      id,
+      { content },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedComment) {
+      return res.status(404).json({ message: "Community not found." });
+    }
+
+    res.status(200).json({ message: "Community updated successfully!", updatedComment });
+  } catch (error) {
+    console.error("Error updating community:", error);
+    res.status(500).json({ message: "Server error while updating community." });
+  }
+});
+app.patch('/edit-community/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description } = req.body;
+
+    // Validate the input
+    if (!description) {
+      return res.status(400).json({ message: "Description is required." });
+    }
+
+    // Find and update the community
+    const updatedCommunity = await Community.findByIdAndUpdate(
+      id,
+      { description },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedCommunity) {
+      return res.status(404).json({ message: "Community not found." });
+    }
+
+    res.status(200).json({ message: "Community updated successfully!", updatedCommunity });
+  } catch (error) {
+    console.error("Error updating community:", error);
+    res.status(500).json({ message: "Server error while updating community." });
   }
 });
 
