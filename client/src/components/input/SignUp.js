@@ -39,6 +39,7 @@ export default function SignupPage( {onSignupComplete} ) {
         let newErrors = {};
     
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailLocalPart = formData.email?.split("@")[0];
     
         if (!formData.firstName) newErrors.firstName = "First name is required.";
         if (!formData.lastName) newErrors.lastName = "Last name is required.";
@@ -63,6 +64,9 @@ export default function SignupPage( {onSignupComplete} ) {
         }
         if (formData.password.includes(formData.email)) {
             newErrors.password = "Password cannot contain your email.";
+        }
+        if (emailLocalPart && formData.password.includes(emailLocalPart)) {
+            newErrors.password = "Password cannot contain the local part of your email.";
         }
     
         if (Object.keys(newErrors).length > 0) {
