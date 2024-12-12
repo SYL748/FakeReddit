@@ -29,6 +29,7 @@ function CommunityPage(props) {
         };
 
         fetchCommunity();
+        // eslint-disable-next-line
     }, [props.communityID]);
 
     const handleJoin = async () => {

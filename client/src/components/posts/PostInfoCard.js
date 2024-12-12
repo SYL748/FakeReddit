@@ -40,6 +40,7 @@ function PostInfoCard(props) {
 
     useEffect(() => {
         getUpvotes(info);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     let inCommunity = false;

@@ -26,6 +26,7 @@ function PostDetails(props) {
 
     useEffect(() => {
         getUpvotes(info);
+        // eslint-disable-next-line
     }, [upvoteCount]);
 
     const incrementUpvote = async () => {

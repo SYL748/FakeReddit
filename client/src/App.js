@@ -5,7 +5,6 @@ import PageBanner from './components/layout/PageBanner';
 import NavBar from './components/layout/NavBar';
 import MainContent from './components/layout/MainContent';
 import { useEffect, useState } from 'react';
-import { sortNewest } from './components/utils/SortingUtil';
 import axios from 'axios';
 import Login from './components/input/Login'
 import SignupPage from './components/input/SignUp';

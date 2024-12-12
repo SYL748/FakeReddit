@@ -1,5 +1,4 @@
 import { useState } from "react";
-import TextInput from "./TextInput";
 import TextAreaInput from "./TextArea";
 import Button from "../general/Button.js";
 import axios from "axios";
@@ -74,7 +73,7 @@ export default function CommentForm(props) {
                     // console.log("adding new comment");
                     axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/comments', newComment);
-                    // console.log(res);
+                    console.log(res);
                 } catch (error) {
                     console.log("error in post client" + error);
                 }

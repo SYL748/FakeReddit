@@ -35,6 +35,7 @@ function MainContent(props) {
       setCommunityID(null);
       setPostID(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, id]);
 
   console.log("current view: ", type, "Post ID:", postID, "Community ID:", communityID, "Comment ID:", props.commentID);

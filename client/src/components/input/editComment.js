@@ -104,7 +104,6 @@ export default function EditComment(props) {
                 onClick={handleDelete}
                 className="button hover-orange"
                 buttonName="Delete Comment"
-                
             />
         </div>
     )

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import './Profile.css';
 
 export default function Profile(props) {
     const [activeTab, setActiveTab] = useState("posts");
@@ -70,6 +71,7 @@ export default function Profile(props) {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, selectedUser]);
 
     const deleteUser = async (deleteUser) => {
@@ -107,14 +109,14 @@ export default function Profile(props) {
 
             <div>
                 {isAdmin && selectedUser.id === adminID && (
-                    <button onClick={() => handleTabChange('users')}>Users</button>
+                    <button className="button-margin" onClick={() => handleTabChange('users')}>Users</button>
                 )}
-                <button onClick={() => handleTabChange("communities")}>Communities</button>
-                <button onClick={() => handleTabChange("posts")}>Posts</button>
-                <button onClick={() => handleTabChange("comments")}>Comments</button>
+                <button className="button-margin" onClick={() => handleTabChange("communities")}>Communities</button>
+                <button className="button-margin" onClick={() => handleTabChange("posts")}>Posts</button>
+                <button className="button-margin" onClick={() => handleTabChange("comments")}>Comments</button>
 
                 {isAdmin && selectedUser.id !== adminID && (
-                    <button onClick={() => getCurrentUser()}>Back to Admin Profile</button>
+                    <button className="button-margin" onClick={() => getCurrentUser()}>Back to Admin Profile</button>
                 )}
             </div>
 
@@ -127,8 +129,8 @@ export default function Profile(props) {
                         {users.map((user) => (
                             <li key={user._id}>
                                 <span>
-                                    <a
-                                        href="#"
+                                    <button
+                                        className="no-style"
                                         onClick={(e) => {
                                             e.preventDefault();
                                             setSelectedUser(user);
@@ -138,7 +140,7 @@ export default function Profile(props) {
                                         }}
                                     >
                                         {user.displayName}
-                                    </a>
+                                     </button>
                                 </span>
                                 <p>Email: {user.email}</p>
                                 <p>Reputation: {user.reputation}</p>
@@ -155,15 +157,15 @@ export default function Profile(props) {
                     {communities.map((community) => (
                     <li key={community._id}>
                         <span>
-                        <a
-                            href="#"
+                        <button
+                            className="no-style"
                             onClick={(e) => {
                             e.preventDefault();
                             props.setView({ type: 'edit-community', id: community._id });
                             }}
                         >
                             {community.name}
-                        </a>
+                        </button>
                         </span>
                     </li>
                     ))}
@@ -177,15 +179,15 @@ export default function Profile(props) {
                     {posts.map((post) => (
                         <li key={post._id}>
                             <span>
-                                <a
-                                    href="#"
+                            <button
+                                    className="no-style"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         props.setView({ type: 'edit-post', id: post._id });
                                     }}
                                 >
                                     {post.title}
-                                </a>
+                                </button>
                             </span>
                         </li>
                     ))}
@@ -199,15 +201,16 @@ export default function Profile(props) {
                     {comments.map((c) => (
                         <li key={c._id}>
                             <span>
-                                <a
-                                    href="#"
+                                <button
+                                    className="no-style"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         props.setView({ type: "edit-comment", id: c._id });
                                     }}
                                 >
-                                    {c.content.slice(0,20)}...
-                                </a>
+                                 {c.content.length > 20 ? (c.content.slice(0,20)) : c.content}
+                                 {c.content.length > 20 ? "..." : ''}
+                                </button>
                             </span>
                         </li>
                     ))}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import TextAreaInput from "./TextArea";
 import TextInput from "./TextInput";
 import SelectInput from "./SelectorInput";
@@ -90,7 +90,7 @@ export default function CreatePostPage(props) {
                     // console.log("adding new post");
                     axios.defaults.withCredentials = true;
                     const res = await axios.post('http://localhost:8000/create-post', newPost);
-                    // console.log(res);
+                    console.log(res);
                 } catch (error) {
                     console.log("error in post client" + error);
                 }
