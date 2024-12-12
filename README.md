@@ -27,7 +27,7 @@ npm install
 ```
 
 3. Database setup
-Make sure MongoDB is running. This can be done with ```mongosh```
+Make sure MongoDB is running. This can be done with ```mongosh```</br>
 Initialize the DB in the server directory:
 ```
 node init.js mongodb://127.0.0.1:27017/phreddit <admin email> <admin username> <admin password>
@@ -46,11 +46,11 @@ Enter url:
 ```http://localhost:3000```
 
 ## Team Member 1 Contribution
-Cody Jiang
+Cody Jiang </br>
 Both contributed to the project. Worked was pretty much split evenly
 as we also had to debug and understand the other person's code.
 
 ## Team Member 2 Contribution
-Shaoyang Li
+Shaoyang Li</br>
 Both contributed to the project. Worked was pretty much split evenly
 as we also had to debug and understand the other person's code.
