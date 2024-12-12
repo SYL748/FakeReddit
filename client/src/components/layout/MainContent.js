@@ -172,6 +172,8 @@ function MainContent(props) {
         linkFlair={props.linkFlair}
         setCommunities={props.setCommunities}
         currentView={props.currentView}
+        setIsMember={props.setIsMember}
+        isMember={props.isMember}
       />
     );
   } else if (type === 'post' && postID) {

@@ -358,6 +358,7 @@ app.get('/communities/:id', async (req, res) => {
 app.post('/communities/:id/join', async (req, res) => {
   try{
     let user = await User.findById(req.session.userId);
+    console.log("JON COMMUNITY:" + user);
     await UserModel.findByIdAndUpdate(
       req.session.userId,
       { $push: { communityIDs: req.params.id } }, // Remove communityId from communityIDs array

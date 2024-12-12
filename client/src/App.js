@@ -30,6 +30,7 @@ function App() {
   const [userComments, setUserComments] = useState([]);
   const [otherComments, setOtherComments] = useState([]);
   const [create, setCreate] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   const fetchCurrentUser = async () => {
     try {
@@ -194,7 +195,7 @@ function App() {
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentView]);
+  }, [currentView, isMember]);
 
   const handleLogin = () => {
     setLoggedIn(true);
@@ -288,6 +289,8 @@ function App() {
             setCommentID={setCommentID}
             userComments={userComments}
             otherComments={otherComments}
+            setIsMember={setIsMember}
+            isMember={isMember}
           />
         </>
       )}
